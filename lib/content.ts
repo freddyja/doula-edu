@@ -1,6 +1,8 @@
 import { extraModules } from "./extra-modules.ts";
 import { pelvicSessions } from "./pelvic-sessions.ts";
+import { positioningSessions } from "./positioning-sessions.ts";
 import type { Module, Session } from "./types";
+import { wellnessModules } from "./wellness-modules.ts";
 
 const pauseForWorry =
   "You feel pain, dizziness, shortness of breath, chest tightness, a headache, bleeding, fluid leaking, or contractions that concern you.";
@@ -542,8 +544,8 @@ const baseSessions: Session[] = [
   },
 ];
 
-export const modules: Module[] = [...baseModules, ...extraModules];
-export const sessions: Session[] = [...baseSessions, ...pelvicSessions];
+export const modules: Module[] = [...baseModules, ...extraModules, ...wellnessModules];
+export const sessions: Session[] = [...baseSessions, ...pelvicSessions, ...positioningSessions];
 
 const moduleById = new Map(modules.map((item) => [item.id, item]));
 const sessionById = new Map(sessions.map((item) => [item.id, item]));

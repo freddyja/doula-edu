@@ -61,7 +61,7 @@ export function MoveScreen() {
       <div
         className="no-scrollbar -mx-3.5 flex snap-x gap-3 overflow-x-auto px-3.5 py-1"
         role="group"
-        aria-label="Filter by pelvic level"
+        aria-label="Filter movement groups"
       >
         <LevelPoster
           label="All"
@@ -72,7 +72,7 @@ export function MoveScreen() {
         />
         {PELVIC_LEVELS.map((level) => {
           const visual = levelVisual(level.id);
-          const short = level.title.split("·")[0]?.trim() ?? level.title;
+          const short = level.short ?? level.title.split("·")[0]?.trim() ?? level.title;
           return (
             <LevelPoster
               key={level.id}

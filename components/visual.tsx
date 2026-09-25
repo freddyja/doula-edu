@@ -51,6 +51,11 @@ const trackTone: Record<TrackId, Tone> = {
   stages: "blush",
   labor: "terra",
   comfort: "sage",
+  position: "terra",
+  habits: "gold",
+  nourishment: "blush",
+  readiness: "plum",
+  evidence: "sky",
   mind: "plum",
   partner: "gold",
   planning: "sky",
@@ -61,6 +66,11 @@ const trackGlyph: Record<TrackId, GlyphName> = {
   stages: "bloom",
   labor: "path",
   comfort: "breath",
+  position: "lean",
+  habits: "check",
+  nourishment: "bowl",
+  readiness: "sun",
+  evidence: "book",
   mind: "spark",
   partner: "hands",
   planning: "bag",
@@ -88,6 +98,7 @@ const levelTone: Record<PelvicLevel, Tone> = {
   mid: "gold",
   outlet: "sky",
   release: "sage",
+  positioning: "blush",
 };
 
 const levelGlyph: Record<PelvicLevel, GlyphName> = {
@@ -95,6 +106,7 @@ const levelGlyph: Record<PelvicLevel, GlyphName> = {
   mid: "mid",
   outlet: "outlet",
   release: "breath",
+  positioning: "lean",
 };
 
 export function stageVisual(stage: StageId) {
@@ -130,7 +142,8 @@ type GlyphName =
   | "mid"
   | "outlet"
   | "book"
-  | "check";
+  | "check"
+  | "lean";
 
 export function Glyph({
   name,
@@ -262,6 +275,15 @@ const glyphPaths: Record<GlyphName, ReactNode> = {
     </>
   ),
   check: <path d="m6.5 12.2 3.2 3.2 7.8-8" />,
+  lean: (
+    <>
+      <circle cx="7.5" cy="6" r="1.6" />
+      <path d="M7.2 8.2 13.5 14" />
+      <path d="M13.5 14H19" />
+      <path d="M6 20.5 10.2 14" />
+      <path d="M13.5 14.2 15.8 20.5" />
+    </>
+  ),
 };
 
 export function HeroArt({ tone }: { tone: Tone }) {
