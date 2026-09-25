@@ -78,6 +78,20 @@ export function Card({
 export const cardLinkClass =
   "block rounded-3xl border border-line bg-surface p-5 shadow-[0_10px_30px_-22px_rgba(42,36,30,0.45)] transition-colors hover:border-accent";
 
+export function Badge({
+  children,
+  tone = "accent",
+}: {
+  children: React.ReactNode;
+  tone?: "accent" | "plain";
+}) {
+  const className =
+    tone === "accent"
+      ? "rounded-full bg-accent-soft px-3 py-1 font-semibold text-accent"
+      : "rounded-full border border-line px-3 py-1 font-semibold";
+  return <span className={className}>{children}</span>;
+}
+
 export function LoadingState() {
   return (
     <p className="text-lg text-muted" role="status">
