@@ -4,31 +4,35 @@ A calm, local-first web app for prenatal and postpartum education and gentle mov
 
 This is general wellness support. It is not medical advice, not a diagnosis, and not a treatment plan. Follow your care provider.
 
-## Run
+Hosted only on GitHub Pages, not Vercel:
+
+https://freddyja.github.io/doula-edu/
+
+## Run locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000/doula-edu/](http://localhost:3000/doula-edu/).
 
-Production build:
-
-```bash
-npm run build
-npm start
-```
-
-Content checks:
+Content checks and the static export:
 
 ```bash
 npm test
+npm run build
 ```
+
+`npm run build` writes the site to `out/`. There is no production Node server. Pushes to `main` install dependencies, run tests, build, and deploy `out/` with GitHub Actions.
+
+In the repository, set **Settings → Pages → Build and deployment → Source** to **GitHub Actions**.
 
 No account, no backend, and no network calls for your notes. Stage, the disclaimer acknowledgment, completions, and notes stay in IndexedDB on this device.
 
 ## Screens
+
+Routes are served under `/doula-edu/`:
 
 - `/` Welcome — choose a stage and acknowledge the disclaimer
 - `/today` Today — the next lesson and the next movement session for that stage

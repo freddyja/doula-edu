@@ -1,18 +1,15 @@
 import type { NextConfig } from "next";
+import { basePath } from "./lib/base-path";
 
 const nextConfig: NextConfig = {
-  reactStrictMode: true,
-  async headers() {
-    return [
-      {
-        source: "/sw.js",
-        headers: [
-          { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
-          { key: "Service-Worker-Allowed", value: "/" },
-        ],
-      },
-    ];
+  output: "export",
+  basePath,
+  assetPrefix: basePath,
+  trailingSlash: true,
+  images: {
+    unoptimized: true,
   },
+  reactStrictMode: true,
 };
 
 export default nextConfig;

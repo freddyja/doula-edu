@@ -1,5 +1,12 @@
-const CACHE = "doula-shell-v1";
-const PRECACHE = ["/", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/icon-512.png"];
+// Keep BASE aligned with `basePath` in lib/base-path.ts.
+const BASE = "/doula-edu";
+const CACHE = "doula-shell-v2";
+const PRECACHE = [
+  `${BASE}/`,
+  `${BASE}/manifest.webmanifest`,
+  `${BASE}/icons/icon-192.png`,
+  `${BASE}/icons/icon-512.png`,
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -26,6 +33,7 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+  if (!url.pathname.startsWith(`${BASE}/`) && url.pathname !== BASE) return;
 
   if (request.mode === "navigate") {
     event.respondWith(
@@ -35,12 +43,12 @@ self.addEventListener("fetch", (event) => {
           caches.open(CACHE).then((cache) => cache.put(request, copy));
           return response;
         })
-        .catch(() => caches.match(request).then((cached) => cached || caches.match("/"))),
+        .catch(() => caches.match(request).then((cached) => cached || caches.match(`${BASE}/`))),
     );
     return;
   }
 
-  if (url.pathname.startsWith("/_next/static") || url.pathname.startsWith("/icons")) {
+  if (url.pathname.startsWith(`${BASE}/_next/static`) || url.pathname.startsWith(`${BASE}/icons`)) {
     event.respondWith(
       caches.match(request).then((cached) => {
         if (cached) return cached;
