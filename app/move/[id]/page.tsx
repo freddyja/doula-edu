@@ -8,6 +8,8 @@ type MoveRouteProps = {
   params: Promise<{ id: string }>;
 };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return sessions.map((session) => ({ id: session.id }));
 }

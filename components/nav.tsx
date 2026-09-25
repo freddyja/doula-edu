@@ -12,9 +12,16 @@ const items = [
   { href: "/progress", label: "Progress", icon: ProgressIcon },
 ] as const;
 
+function normalize(path: string) {
+  if (path.length > 1 && path.endsWith("/")) return path.slice(0, -1);
+  return path || "/";
+}
+
 function isCurrent(pathname: string, href: string) {
-  if (href === "/") return pathname === "/";
-  return pathname === href || pathname.startsWith(`${href}/`);
+  const current = normalize(pathname);
+  const target = normalize(href);
+  if (target === "/") return current === "/";
+  return current === target || current.startsWith(`${target}/`);
 }
 
 export function SideNav() {

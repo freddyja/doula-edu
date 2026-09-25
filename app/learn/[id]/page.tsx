@@ -8,6 +8,8 @@ type LearnRouteProps = {
   params: Promise<{ id: string }>;
 };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return modules.map((lesson) => ({ id: lesson.id }));
 }
