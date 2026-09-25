@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Card, MediaRow, ScreenHero, StickyHeading } from "@/components/ui";
-import { Glyph, levelVisual, tileClass } from "@/components/visual";
+import { Card, ListGroup, PosterRow, ScreenHero, SectionHero } from "@/components/ui";
+import { Glyph, heroClass, levelVisual, type Tone } from "@/components/visual";
 import { sessions } from "@/lib/content";
 import { forStage } from "@/lib/select";
 import { PELVIC_LEVELS, pelvicLevelMeta } from "@/lib/stages";
@@ -17,23 +17,27 @@ function byPriority(items: readonly Session[]): Session[] {
 
 function SessionList({ items, done }: { items: Session[]; done: Set<string> }) {
   return (
-    <ul className="space-y-2">
+    <ListGroup>
       {items.map((item) => {
         const level = item.pelvicLevel ? pelvicLevelMeta(item.pelvicLevel) : null;
         const visual = item.pelvicLevel ? levelVisual(item.pelvicLevel) : null;
+        const complete = done.has(item.id);
         return (
           <li key={item.id}>
-            <MediaRow
+            <PosterRow
               href={`/move/${item.id}`}
               title={item.title}
-              meta={`${level ? level.title : item.focus}${done.has(item.id) ? " · Done" : ""} · About ${item.minutes} min · ${item.summary}`}
+              meta={`About ${item.minutes} min · ${level ? level.title : item.focus}${
+                complete ? " · Done" : ""
+              }`}
               tone={visual?.tone ?? "plum"}
               glyph={visual?.glyph ?? "breath"}
+              done={complete}
             />
           </li>
         );
       })}
-    </ul>
+    </ListGroup>
   );
 }
 
@@ -49,50 +53,42 @@ export function MoveScreen() {
   const visible = filter === "all" ? items : leveled.filter((item) => item.pelvicLevel === filter);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <ScreenHero tone="sage" title="Move" kicker="Follow along">
         Written steps, no video. Stop if something feels wrong, and ask your provider what fits you.
       </ScreenHero>
 
-      <div className="grid grid-cols-2 gap-2" role="group" aria-label="Filter by pelvic level">
-        <FilterTile
-          label="All sessions"
-          detail="Pelvic levels and short practices"
-          selected={filter === "all"}
+      <div
+        className="no-scrollbar -mx-3.5 flex snap-x gap-3 overflow-x-auto px-3.5 py-1"
+        role="group"
+        aria-label="Filter by pelvic level"
+      >
+        <LevelPoster
+          label="All"
+          pressed={filter === "all"}
           onClick={() => setFilter("all")}
-          className="col-span-2"
+          tone="sage"
+          glyph="move"
         />
         {PELVIC_LEVELS.map((level) => {
           const visual = levelVisual(level.id);
           const short = level.title.split("·")[0]?.trim() ?? level.title;
           return (
-            <button
+            <LevelPoster
               key={level.id}
-              type="button"
-              aria-pressed={filter === level.id}
+              label={short}
+              pressed={filter === level.id}
               onClick={() => setFilter(level.id)}
-              className={`pressable flex min-h-16 items-center gap-2.5 rounded-2xl border px-2.5 py-2 text-left ${
-                filter === level.id ? "border-sage bg-sage-soft" : "border-line bg-surface"
-              }`}
-            >
-              <span
-                className={`grid size-10 shrink-0 place-items-center rounded-xl ${tileClass[visual.tone]}`}
-              >
-                <Glyph name={visual.glyph} className="size-5" />
-              </span>
-              <span className="min-w-0">
-                <span className="block text-sm font-extrabold leading-tight">{short}</span>
-                <span className="mt-0.5 line-clamp-2 block text-xs leading-snug text-muted">
-                  {level.description}
-                </span>
-              </span>
-            </button>
+              tone={visual.tone}
+              glyph={visual.glyph}
+              pressedLabel={level.title}
+            />
           );
         })}
       </div>
 
       {filter === "all" ? (
-        <div className="space-y-4">
+        <div className="space-y-5">
           {leveled.length === 0 ? (
             <p className="text-sm leading-relaxed text-muted">
               Pelvic-level sessions in this app are aimed at pregnancy and later postpartum. This
@@ -104,10 +100,13 @@ export function MoveScreen() {
               if (group.length === 0) return null;
               return (
                 <section key={level.id} aria-labelledby={`level-${level.id}`} className="space-y-2">
-                  <StickyHeading id={`level-${level.id}`} tone={levelVisual(level.id).tone}>
-                    {level.title}
-                  </StickyHeading>
-                  <p className="text-sm leading-snug text-muted">{level.description}</p>
+                  <SectionHero
+                    id={`level-${level.id}`}
+                    title={level.title}
+                    tone={levelVisual(level.id).tone}
+                  >
+                    {level.description}
+                  </SectionHero>
                   <SessionList items={group} done={done} />
                 </section>
               );
@@ -115,30 +114,29 @@ export function MoveScreen() {
           )}
           {shorts.length > 0 ? (
             <section aria-labelledby="short-practices" className="space-y-2">
-              <StickyHeading id="short-practices" tone="plum">
-                Short practices
-              </StickyHeading>
-              <p className="text-sm leading-snug text-muted">
+              <SectionHero id="short-practices" title="Short practices" tone="plum">
                 Breathing and smaller movements, usually under 10 minutes. They are not organized
                 by pelvic level.
-              </p>
+              </SectionHero>
               <SessionList items={shorts} done={done} />
             </section>
           ) : null}
         </div>
       ) : visible.length > 0 ? (
-        <div className="space-y-2">
-          <p className="text-sm leading-snug text-muted">{pelvicLevelMeta(filter)?.description}</p>
+        <section className="space-y-2" aria-labelledby="filtered-level">
+          <SectionHero id="filtered-level" title={pelvicLevelMeta(filter)?.title ?? "Sessions"} tone={levelVisual(filter).tone}>
+            {pelvicLevelMeta(filter)?.description}
+          </SectionHero>
           <SessionList items={visible} done={done} />
-        </div>
+        </section>
       ) : (
         <Card>
           <h2 className="font-display text-lg font-extrabold tracking-tight">
             Nothing in this level for your stage
           </h2>
           <p className="mt-1 text-sm leading-snug text-muted">
-            {pelvicLevelMeta(filter)?.title} sessions are not listed for the stage you chose. Short
-            practices are still under All sessions.
+            {pelvicLevelMeta(filter)?.title} sessions are not listed for the stage you chose.{" "}
+            {pelvicLevelMeta(filter)?.description} Short practices are still under All.
           </p>
         </Card>
       )}
@@ -146,31 +144,38 @@ export function MoveScreen() {
   );
 }
 
-function FilterTile({
+function LevelPoster({
   label,
-  detail,
-  selected,
+  pressed,
   onClick,
-  className = "",
+  tone,
+  glyph,
+  pressedLabel,
 }: {
   label: string;
-  detail: string;
-  selected: boolean;
+  pressed: boolean;
   onClick: () => void;
-  className?: string;
+  tone: Tone;
+  glyph: Parameters<typeof Glyph>[0]["name"];
+  pressedLabel?: string;
 }) {
   return (
     <button
       type="button"
-      aria-pressed={selected}
+      aria-pressed={pressed}
+      aria-label={pressedLabel ?? label}
       onClick={onClick}
-      className={`pressable min-h-12 rounded-2xl border px-3 py-2 text-left ${
-        selected ? "border-sage bg-sage text-accent-ink" : "border-line bg-surface text-ink"
-      } ${className}`}
+      className="pressable flex w-[4.75rem] shrink-0 snap-start flex-col items-center gap-1.5"
     >
-      <span className="block text-sm font-extrabold leading-tight">{label}</span>
-      <span className={`mt-0.5 block text-xs leading-snug ${selected ? "text-accent-ink" : "text-muted"}`}>
-        {detail}
+      <span
+        className={`grid size-[4.75rem] place-items-center overflow-hidden rounded-[1.2rem] ${heroClass[tone]} ${
+          pressed ? "ring-2 ring-ink ring-offset-2 ring-offset-bg" : ""
+        }`}
+      >
+        <Glyph name={glyph} className="size-7" />
+      </span>
+      <span className={`text-center text-xs leading-tight ${pressed ? "font-extrabold text-ink" : "font-bold text-muted"}`}>
+        {label}
       </span>
     </button>
   );

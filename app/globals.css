@@ -221,6 +221,10 @@ summary {
   background: linear-gradient(145deg, #5c2036 0%, #7d2e4a 58%, #8d3856 100%);
 }
 
+.hero-gold {
+  background: linear-gradient(145deg, #4a340c 0%, #6d4a0e 58%, #7a5412 100%);
+}
+
 .wellness-note summary {
   list-style: none;
 }

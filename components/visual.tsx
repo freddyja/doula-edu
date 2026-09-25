@@ -4,12 +4,13 @@ import type { PelvicLevel, PillarId, StageId, TrackId } from "@/lib/types";
 export const TONES = ["terra", "sage", "sky", "plum", "blush", "gold"] as const;
 export type Tone = (typeof TONES)[number];
 
-export const heroClass: Record<Exclude<Tone, "gold">, string> = {
+export const heroClass: Record<Tone, string> = {
   terra: "hero-block hero-terra",
   sage: "hero-block hero-sage",
   sky: "hero-block hero-sky",
   plum: "hero-block hero-plum",
   blush: "hero-block hero-blush",
+  gold: "hero-block hero-gold",
 };
 
 export const tileClass: Record<Tone, string> = {
@@ -263,7 +264,7 @@ const glyphPaths: Record<GlyphName, ReactNode> = {
   check: <path d="m6.5 12.2 3.2 3.2 7.8-8" />,
 };
 
-export function HeroArt({ tone }: { tone: Exclude<Tone, "gold"> }) {
+export function HeroArt({ tone }: { tone: Tone }) {
   const accent =
     tone === "sage"
       ? "#d7f3e4"
