@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui";
-import { WELLNESS_LONG, WELLNESS_SHORT } from "@/lib/wellness";
+import { WELLNESS_SHORT } from "@/lib/wellness";
 
 export function WellnessSheet({ onDismiss }: { onDismiss: () => Promise<void> }) {
   const [error, setError] = useState<string | null>(null);
@@ -27,16 +27,16 @@ export function WellnessSheet({ onDismiss }: { onDismiss: () => Promise<void> })
         aria-labelledby="wellness-sheet-title"
         className="sheet-panel"
       >
-        <h2 id="wellness-sheet-title" className="font-display text-2xl leading-tight">
+        <div className="sheet-grab" aria-hidden="true" />
+        <h2 id="wellness-sheet-title" className="font-display text-xl font-extrabold tracking-tight">
           Wellness support only
         </h2>
-        <p className="mt-3 text-base leading-relaxed">{WELLNESS_SHORT}</p>
-        <p className="mt-3 text-base leading-relaxed text-muted">{WELLNESS_LONG}</p>
-        <p className="mt-3 text-sm leading-relaxed text-muted">
-          You can read this again at the bottom of Progress.
+        <p className="mt-2 text-sm leading-relaxed">{WELLNESS_SHORT}</p>
+        <p className="mt-2 text-xs leading-relaxed text-muted">
+          You can read the full note at the bottom of Progress.
         </p>
         {error ? (
-          <p className="mt-3 text-base text-accent" role="alert">
+          <p className="mt-3 text-sm text-accent" role="alert">
             {error}
           </p>
         ) : null}

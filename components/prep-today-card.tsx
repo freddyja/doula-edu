@@ -24,7 +24,7 @@ import {
 import { Badge, Button, ButtonLink, Card } from "@/components/ui";
 
 const prominentCard =
-  "rounded-2xl border-2 border-accent bg-surface p-4 shadow-[0_8px_24px_-18px_rgba(42,36,30,0.45)]";
+  "overflow-hidden rounded-[1.35rem] border border-accent/20 border-t-4 border-t-accent bg-surface p-3.5 shadow-card";
 
 export function PrepTodayCard() {
   const { profile, completions } = useDoulaState();
@@ -43,7 +43,7 @@ export function PrepTodayCard() {
     return (
       <section className={prominentCard}>
         <p className="text-sm font-semibold text-accent">Prep</p>
-        <h2 className="mt-2 font-display text-2xl">The start date needs a reset</h2>
+        <h2 className="mt-2 font-display text-xl font-extrabold tracking-tight">The start date needs a reset</h2>
         <p className="mt-2 text-base leading-relaxed text-muted">
           The date saved on this device could not be read. Starting again sets today as day 1.
           Cards you already marked stay saved.
@@ -60,7 +60,7 @@ export function PrepTodayCard() {
     return (
       <Card>
         <p className="text-sm font-semibold text-accent">Prep</p>
-        <h2 className="mt-2 font-display text-2xl">Your path has not reached today</h2>
+        <h2 className="mt-2 font-display text-xl font-extrabold tracking-tight">Your path has not reached today</h2>
         <p className="mt-2 text-base leading-relaxed text-muted">
           {startLabel
             ? `The start date on this device is ${startLabel}.`
@@ -80,7 +80,7 @@ export function PrepTodayCard() {
     return (
       <section className={prominentCard}>
         <p className="text-sm font-semibold text-accent">Prep</p>
-        <h2 className="mt-2 font-display text-2xl">The 8 weeks are complete</h2>
+        <h2 className="mt-2 font-display text-xl font-extrabold tracking-tight">The 8 weeks are complete</h2>
         <p className="mt-2 text-base leading-relaxed text-muted">
           {doneCount} of {PREP_DAY_COUNT} days are marked done on this device.
           {streak > 0 ? ` Closing streak: ${streak} days.` : " There is no new card today."} You
@@ -111,7 +111,7 @@ export function PrepTodayCard() {
           {dateLabel ? ` · ${dateLabel}` : ""}
         </span>
       </div>
-      <h2 className="mt-2 font-display text-2xl leading-tight">{day.title}</h2>
+      <h2 className="mt-2 font-display text-2xl font-extrabold leading-tight tracking-tight">{day.title}</h2>
       <p className="mt-2 text-sm leading-relaxed text-muted">{pillar?.blurb}</p>
       <p className="mt-3 text-base leading-relaxed">{day.action}</p>
       <p className="mt-3 text-sm text-muted">
@@ -164,17 +164,17 @@ function TodayActions({ itemId, done, note }: { itemId: string; done: boolean; n
 
   return (
     <div className="mt-4">
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-col gap-2">
         {done ? (
-          <Button type="button" variant="secondary" disabled={pending} onClick={() => void onUndo()}>
+          <Button type="button" variant="secondary" disabled={pending} onClick={() => void onUndo()} className="w-full">
             {pending ? "Saving…" : "Undo today"}
           </Button>
         ) : (
-          <Button type="button" disabled={pending} onClick={() => void onMark()}>
+          <Button type="button" disabled={pending} onClick={() => void onMark()} className="w-full">
             {pending ? "Saving…" : "Mark done"}
           </Button>
         )}
-        <ButtonLink href={`/prep#${itemId}`} variant="secondary">
+        <ButtonLink href={`/prep#${itemId}`} variant="secondary" className="w-full">
           8-week path
         </ButtonLink>
       </div>
@@ -190,18 +190,18 @@ function TodayActions({ itemId, done, note }: { itemId: string; done: boolean; n
 function PrepOffer() {
   return (
     <section className={prominentCard}>
-      <p className="text-sm font-semibold text-accent">Prep · optional</p>
-      <h2 className="mt-2 font-display text-2xl">An 8-week daily card</h2>
-      <p className="mt-2 text-base leading-relaxed">
+      <p className="text-xs font-bold text-accent">Prep · optional</p>
+      <h2 className="mt-1 font-display text-xl font-extrabold tracking-tight">An 8-week daily card</h2>
+      <p className="mt-2 text-sm leading-relaxed">
         One small card a day across mindset, movement, nutrition, partner support, and birth
         education. Nutrition cards are wellness tips, not meal plans. The path is written with
         pregnancy in mind. If you have already given birth, keep the cards that help and skip the
         rest.
       </p>
-      <p className="mt-2 text-base leading-relaxed text-muted">
+      <p className="mt-2 text-sm leading-relaxed text-muted">
         You can skip Prep and still use Learn and Move. Nothing is sent to a server.
       </p>
-      <div className="mt-4">
+      <div className="mt-3">
         <StartButton label="Start 8-week prep" />
       </div>
     </section>
@@ -225,7 +225,7 @@ function StartButton({ label }: { label: string }) {
 
   return (
     <>
-      <Button type="button" disabled={pending} onClick={() => void onStart()}>
+      <Button type="button" disabled={pending} onClick={() => void onStart()} className="w-full">
         {pending ? "Saving…" : label}
       </Button>
       {error ? (

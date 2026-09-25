@@ -11,69 +11,59 @@ import { stageLabel } from "@/lib/stages";
 import { dismissWellnessSheet, useDoulaState } from "@/lib/store";
 
 type Chrome =
-  | { mode: "brand" }
-  | { mode: "tab"; title: string }
-  | { mode: "detail"; backHref: string; backLabel: string }
-  | { mode: "plain"; title: string };
+  | { mode: "home" }
+  | { mode: "detail"; backHref: string; backLabel: string };
 
 function routeChrome(pathname: string): Chrome {
   const path = normalizePath(pathname);
-  if (path === "/") return { mode: "brand" };
-  if (path === "/today") return { mode: "tab", title: "Today" };
-  if (path === "/learn") return { mode: "tab", title: "Learn" };
-  if (path === "/move") return { mode: "tab", title: "Move" };
-  if (path === "/progress") return { mode: "tab", title: "Progress" };
-  if (path === "/prep") return { mode: "tab", title: "Prep" };
   if (path.startsWith("/learn/")) return { mode: "detail", backHref: "/learn", backLabel: "Learn" };
   if (path.startsWith("/move/")) return { mode: "detail", backHref: "/move", backLabel: "Move" };
-  return { mode: "plain", title: "Doula" };
+  return { mode: "home" };
 }
 
-function AppBar({ chrome, stage }: { chrome: Chrome; stage: string | null }) {
-  if (chrome.mode === "detail") {
-    return (
-      <header className="app-bar">
-        <div className="flex min-h-11 items-center justify-between gap-3">
-          <Link
-            href={chrome.backHref}
-            className="pressable -ml-2 inline-flex min-h-11 items-center gap-0.5 rounded-full pr-3 text-accent"
-            aria-label={`Back to ${chrome.backLabel}`}
-          >
-            <ChevronLeft className="size-6" />
-            <span className="text-base font-bold">{chrome.backLabel}</span>
-          </Link>
-          {stage ? <p className="truncate text-xs font-bold text-muted">{stage}</p> : null}
-        </div>
-      </header>
-    );
-  }
-
-  if (chrome.mode === "brand") {
-    return (
-      <header className="app-bar">
-        <div className="flex min-h-11 items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <span className="grid size-9 place-items-center rounded-full bg-accent text-sm font-bold text-accent-ink">
-              D
-            </span>
-            <p className="font-display text-2xl leading-none">Doula</p>
-          </div>
-          {stage ? <p className="truncate text-xs font-bold text-muted">{stage}</p> : null}
-        </div>
-      </header>
-    );
-  }
-
-  const title = chrome.title;
+function BrandBar({ stage }: { stage: string | null }) {
   return (
     <header className="app-bar">
-      <div className="min-w-0 py-0.5">
-        {stage ? <p className="text-xs font-bold text-accent">{stage}</p> : null}
-        {chrome.mode === "tab" ? (
-          <h1 className="font-display text-[1.65rem] leading-none text-ink">{title}</h1>
-        ) : (
-          <p className="font-display text-[1.65rem] leading-none text-ink">{title}</p>
-        )}
+      <div className="flex min-h-11 items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="grid size-8 place-items-center rounded-xl bg-accent text-sm font-extrabold text-accent-ink">
+            D
+          </span>
+          <p className="font-display text-lg font-extrabold leading-none tracking-tight">Doula</p>
+        </div>
+        {stage ? (
+          <p className="max-w-[11rem] truncate rounded-full bg-accent-soft px-2.5 py-1 text-xs font-bold text-accent">
+            {stage}
+          </p>
+        ) : null}
+      </div>
+    </header>
+  );
+}
+
+function DetailBar({
+  backHref,
+  backLabel,
+  stage,
+}: {
+  backHref: string;
+  backLabel: string;
+  stage: string | null;
+}) {
+  return (
+    <header className="app-bar">
+      <div className="flex min-h-11 items-center justify-between gap-3">
+        <Link
+          href={backHref}
+          className="pressable -ml-2 inline-flex min-h-11 items-center gap-0.5 rounded-full pr-3 text-accent"
+          aria-label={`Back to ${backLabel}`}
+        >
+          <ChevronLeft className="size-6" />
+          <span className="text-base font-bold">{backLabel}</span>
+        </Link>
+        {stage ? (
+          <p className="max-w-[9rem] truncate text-xs font-bold text-muted">{stage}</p>
+        ) : null}
       </div>
     </header>
   );
@@ -86,7 +76,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const chrome = routeChrome(pathname);
   const hasProfile = Boolean(profile?.disclaimerAcknowledged && profile.stage);
   const stage = hasProfile && profile ? stageLabel(profile.stage) : null;
-  const hideTabs = chrome.mode === "brand" && !hasProfile;
+  const hideTabs = normalizePath(pathname) === "/" && !hasProfile;
   const showWellness =
     ready && hasProfile && !settings.wellnessSheetDismissed && normalizePath(pathname) === "/today";
 
@@ -104,9 +94,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           Skip to content
         </a>
         <div inert={showWellness ? true : undefined} className="flex min-h-0 flex-1 flex-col">
-          <AppBar chrome={chrome} stage={stage} />
+          {chrome.mode === "detail" ? (
+            <DetailBar backHref={chrome.backHref} backLabel={chrome.backLabel} stage={stage} />
+          ) : (
+            <BrandBar stage={stage} />
+          )}
           <main id="main" ref={mainRef} tabIndex={-1} className="phone-scroll">
-            <div key={pathname} className="screen-enter px-4 pt-3 pb-5">
+            <div key={pathname} className="screen-enter px-3.5 pt-2.5 pb-4">
               {children}
             </div>
           </main>

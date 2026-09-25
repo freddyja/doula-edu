@@ -1,12 +1,14 @@
 import Link from "next/link";
+import { ChevronRight } from "@/components/icons";
+import { Glyph, HeroArt, dotClass, heroClass, tileClass, type Tone } from "@/components/visual";
 
 const buttonBase =
-  "pressable inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-base font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50";
+  "pressable inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl px-5 font-display text-base font-bold tracking-tight disabled:cursor-not-allowed disabled:opacity-50";
 
 const variants = {
   primary: "bg-accent text-accent-ink hover:bg-accent-strong",
   secondary: "border border-line bg-surface text-ink hover:bg-accent-soft",
-  quiet: "min-h-11 rounded-xl px-3 text-accent hover:bg-accent-soft",
+  quiet: "min-h-11 rounded-xl px-3 font-sans text-sm font-bold text-accent hover:bg-accent-soft",
 } as const;
 
 export function Button({
@@ -37,29 +39,73 @@ export function ButtonLink({
   );
 }
 
-export function ScreenIntro({ children }: { children: React.ReactNode }) {
-  return <p className="text-[0.9375rem] leading-snug text-balance text-muted">{children}</p>;
+export function ScreenHero({
+  title,
+  tone,
+  kicker,
+  children,
+}: {
+  title: string;
+  tone: Exclude<Tone, "gold">;
+  kicker?: string;
+  children?: React.ReactNode;
+}) {
+  return (
+    <header className={`${heroClass[tone]} px-4 py-4`}>
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          {kicker ? <p className="text-xs font-bold">{kicker}</p> : null}
+          <h1 className="font-display text-[2.05rem] font-extrabold leading-[1.02] tracking-tight">
+            {title}
+          </h1>
+        </div>
+        <div className="h-20 w-24 shrink-0" aria-hidden="true">
+          <HeroArt tone={tone} />
+        </div>
+      </div>
+      {children ? <div className="mt-2 text-sm font-semibold leading-snug">{children}</div> : null}
+    </header>
+  );
 }
 
-export function StickyHeading({
+export function SectionLabel({
   id,
   children,
+  tone = "terra",
 }: {
   id?: string;
   children: React.ReactNode;
+  tone?: Tone;
 }) {
   return (
-    <h2
-      id={id}
-      className="sticky top-0 z-10 -mx-4 border-b border-line/80 bg-bg/95 px-4 py-2 font-display text-xl leading-tight backdrop-blur"
-    >
+    <h2 id={id} className="flex min-h-11 items-center gap-2 text-base font-extrabold text-ink">
+      <span className={`size-2.5 rounded-full ${dotClass[tone]}`} aria-hidden="true" />
       {children}
     </h2>
   );
 }
 
-const cardSurface =
-  "rounded-2xl border border-line bg-surface p-4 shadow-[0_8px_24px_-18px_rgba(42,36,30,0.45)]";
+export function StickyHeading({
+  id,
+  children,
+  tone = "terra",
+}: {
+  id?: string;
+  children: React.ReactNode;
+  tone?: Tone;
+}) {
+  return (
+    <h2
+      id={id}
+      className="sticky top-0 z-10 -mx-3.5 flex min-h-11 items-center gap-2 bg-bg/95 px-3.5 py-1.5 text-base font-extrabold text-ink backdrop-blur"
+    >
+      <span className={`size-2.5 shrink-0 rounded-full ${dotClass[tone]}`} aria-hidden="true" />
+      {children}
+    </h2>
+  );
+}
+
+const cardSurface = "rounded-2xl border border-line bg-surface p-3.5 shadow-card";
 
 export function Card({
   children,
@@ -71,7 +117,40 @@ export function Card({
   return <section className={`${cardSurface} ${className}`}>{children}</section>;
 }
 
-export const cardLinkClass = `pressable block ${cardSurface} transition-colors hover:border-accent active:bg-accent-soft`;
+export function MediaRow({
+  href,
+  title,
+  meta,
+  tone = "terra",
+  glyph,
+  heading = "h3",
+}: {
+  href: string;
+  title: string;
+  meta: string;
+  tone?: Tone;
+  glyph: Parameters<typeof Glyph>[0]["name"];
+  heading?: "h2" | "h3";
+}) {
+  const Title = heading;
+  return (
+    <Link
+      href={href}
+      className="pressable flex min-h-16 items-center gap-3 rounded-2xl border border-line bg-surface px-2.5 py-2 shadow-card"
+    >
+      <span className={`grid size-12 shrink-0 place-items-center rounded-2xl ${tileClass[tone]}`}>
+        <Glyph name={glyph} />
+      </span>
+      <span className="min-w-0 flex-1">
+        <Title className="font-display text-base font-extrabold leading-tight tracking-tight text-ink">
+          {title}
+        </Title>
+        <span className="mt-0.5 line-clamp-1 block text-sm text-muted">{meta}</span>
+      </span>
+      <ChevronRight className="size-5 shrink-0 text-muted" />
+    </Link>
+  );
+}
 
 export function Badge({
   children,
@@ -82,14 +161,14 @@ export function Badge({
 }) {
   const className =
     tone === "accent"
-      ? "rounded-full bg-accent-soft px-3 py-1 font-semibold text-accent"
-      : "rounded-full border border-line px-3 py-1 font-semibold";
+      ? "rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-bold text-accent"
+      : "rounded-full border border-line px-2.5 py-0.5 text-xs font-bold";
   return <span className={className}>{children}</span>;
 }
 
 export function LoadingState() {
   return (
-    <p className="text-lg text-muted" role="status">
+    <p className="text-base text-muted" role="status">
       Opening your saved place…
     </p>
   );
@@ -98,8 +177,8 @@ export function LoadingState() {
 export function StorageError({ message }: { message: string }) {
   return (
     <Card>
-      <h1 className="font-display text-3xl">Storage is unavailable</h1>
-      <p className="mt-3 text-lg leading-relaxed text-muted">{message}</p>
+      <h1 className="font-display text-2xl font-extrabold tracking-tight">Storage is unavailable</h1>
+      <p className="mt-2 text-sm leading-relaxed text-muted">{message}</p>
     </Card>
   );
 }

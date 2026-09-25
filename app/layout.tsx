@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Nunito } from "next/font/google";
+import { Nunito, Outfit } from "next/font/google";
 import Script from "next/script";
 import { AppShell } from "@/components/app-shell";
 import "./globals.css";
@@ -10,10 +10,11 @@ const body = Nunito({
   display: "swap",
 });
 
-const display = Fraunces({
+const display = Outfit({
   subsets: ["latin"],
   variable: "--font-display-face",
   display: "swap",
+  weight: ["600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f3eee6",
+  themeColor: "#f4efe8",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
