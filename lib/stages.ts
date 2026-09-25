@@ -48,6 +48,36 @@ export const TRACKS: { id: TrackId; title: string; description: string }[] = [
       "Breath, position, and other comfort ideas. Stop anything that feels worse.",
   },
   {
+    id: "position",
+    title: "Fetal position",
+    description:
+      "Why people talk about how a baby is lying. Position varies. Nothing here turns a baby.",
+  },
+  {
+    id: "habits",
+    title: "Do's and don'ts",
+    description:
+      "Everyday pregnancy habits, substances to ask about, and reasons people are often told to call. Not a rule book for your pregnancy.",
+  },
+  {
+    id: "nourishment",
+    title: "Nutrition",
+    description:
+      "Eating and drinking patterns by trimester. Wellness education only, not a meal plan or medical nutrition advice.",
+  },
+  {
+    id: "readiness",
+    title: "Labor readiness",
+    description:
+      "Late-pregnancy comfort and the stories people hear about starting labor. Nothing here starts labor on a schedule.",
+  },
+  {
+    id: "evidence",
+    title: "Evidence",
+    description:
+      "Plain-language notes on topics people ask about. Concepts, not citations, and not a recommendation for your birth.",
+  },
+  {
     id: "mind",
     title: "Mental prep",
     description: "Worry, attention, and mood. Feelings are not a grade, and this is not counseling.",
@@ -99,7 +129,7 @@ export const PILLARS: { id: PillarId; label: string; blurb: string }[] = [
   },
 ];
 
-export const PELVIC_LEVELS: { id: PelvicLevel; title: string; description: string }[] = [
+export const PELVIC_LEVELS: { id: PelvicLevel; title: string; short?: string; description: string }[] = [
   {
     id: "inlet",
     title: "Inlet · top",
@@ -123,6 +153,13 @@ export const PELVIC_LEVELS: { id: PelvicLevel; title: string; description: strin
     title: "Release",
     description:
       "Breath and mobility for letting the pelvic floor soften. A kegel routine is not the goal.",
+  },
+  {
+    id: "positioning",
+    title: "Positioning",
+    short: "Position",
+    description:
+      "Forward-leaning rest, side-lying, and gentle hip movement people sometimes practice while thinking about how a baby is lying. These sessions do not turn a baby or open the whole pelvis.",
   },
 ];
 

@@ -44,6 +44,7 @@ const RAW: { title: string; blurb: string; cards: CardInput[] }[] = [
         title: "Water where you can see it",
         action:
           "Put a water bottle where you will notice it, and sip when you do. There is no target to hit. This is a reminder, not a fluid prescription.",
+        learnId: "rest-water-movement",
       },
       {
         title: "One named task",
@@ -168,6 +169,7 @@ const RAW: { title: string; blurb: string; cards: CardInput[] }[] = [
         title: "A question before a new remedy",
         action:
           "If supplements, teas, or nausea remedies are confusing, write one question for your provider. Wait for their answer before adding something new.",
+        learnId: "discuss-before-you-add",
       },
       {
         title: "A standing job",

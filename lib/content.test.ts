@@ -20,8 +20,8 @@ const banned = [
 
 describe("seed content", () => {
   it("covers prep, learn, and move", () => {
-    assert.ok(modules.length >= 24 && modules.length <= 40);
-    assert.ok(sessions.length >= 14 && sessions.length <= 24);
+    assert.ok(modules.length >= 36 && modules.length <= 48);
+    assert.ok(sessions.length >= 18 && sessions.length <= 28);
     assert.equal(prepDays.length, 56);
 
     for (const track of TRACK_IDS) {
@@ -97,6 +97,51 @@ describe("seed content", () => {
       assert.ok(lesson.points.length >= 3);
       assert.ok(lesson.tryThis.length > 20);
     }
+
+    const positioning = sessions.filter((item) => item.pelvicLevel === "positioning");
+    assert.ok(positioning.length >= 3);
+    const positioningText = JSON.stringify(positioning).toLowerCase();
+    assert.match(positioningText, /does not turn a baby|do not turn a baby/);
+    assert.match(positioningText, /pain/);
+  });
+
+  it("keeps the wellness tracks educational and non-promissory", () => {
+    const tracks = ["position", "habits", "nourishment", "readiness", "evidence"] as const;
+    for (const track of tracks) {
+      const lessons = modules.filter((item) => item.track === track);
+      assert.ok(lessons.length >= 1, track);
+      for (const lesson of lessons) {
+        const text = `${lesson.summary} ${lesson.points.join(" ")} ${lesson.tryThis}`;
+        assert.match(text, /provider/i, lesson.id);
+      }
+    }
+
+    for (const lesson of modules.filter((item) => item.track === "nourishment")) {
+      assert.match(lesson.summary, /not a meal plan/i, lesson.id);
+      assert.match(lesson.summary, /follow your care provider/i, lesson.id);
+    }
+
+    const readiness = JSON.stringify(
+      modules.filter((item) => item.track === "readiness"),
+    ).toLowerCase();
+    assert.match(readiness, /folklore/);
+    assert.match(readiness, /nothing here starts labor on a schedule/);
+    assert.equal(readiness.includes("will start labor"), false);
+    assert.equal(readiness.includes("guaranteed"), false);
+
+    const evidence = JSON.stringify(
+      modules.filter((item) => item.track === "evidence"),
+    ).toLowerCase();
+    assert.match(evidence, /bishop/);
+    assert.match(evidence, /cascade/);
+    assert.match(evidence, /not a recommendation/);
+    assert.equal(evidence.includes("%"), false);
+
+    const habits = modules.filter((item) => item.track === "habits").map((item) => item.id);
+    assert.ok(habits.includes("rest-water-movement"));
+    assert.ok(habits.includes("discuss-before-you-add"));
+    assert.ok(prepDays.some((day) => day.learnId === "rest-water-movement"));
+    assert.ok(prepDays.some((day) => day.learnId === "discuss-before-you-add"));
   });
 
   it("does not invent study citations, cure language, or competitor brands", () => {

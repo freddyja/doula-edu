@@ -30,16 +30,24 @@ The path is written with pregnancy in mind. If you have already given birth, use
 
 ### Learn
 
-Stage-based lessons: what this part of pregnancy or postpartum is often like, how labor is commonly described, comfort and breath, mental prep, partner support, a packing list, questions to discuss for a birth plan, and newborn basics. The birth-plan page is a list of questions for your care provider, not a clinical plan.
+Stage-based lessons, grouped into tracks:
+
+- Stages, labor, comfort and breath, mental prep, partner support, packing and birth-plan questions, and newborn basics. The birth-plan page is a list of questions for your care provider, not a clinical plan.
+- **Fetal position** — why lie and position are discussed, and that neither exercises nor this app can turn a baby.
+- **Do's and don'ts** — rest, hydration, gentle movement, substances to ask about, and reasons people are often told to call. Two Prep cards link here.
+- **Nutrition** — trimester lessons plus nutrients people commonly ask about (folate, iron, calcium, protein, omega-3s). Wellness education, not a meal plan.
+- **Labor readiness** — late-pregnancy comfort habits, and folklore about starting labor (dates, pineapple, and similar ideas). Nothing in that track starts labor on a schedule.
+- **Evidence** — plain-language notes on induction and cesarean birth as a conversation, the Bishop score, and themes in midwifery and planned home birth. Not a recommendation, and not a pile of citations.
 
 ### Move
 
-Short practices, plus longer follow-along sessions (about 15–30 minutes of written steps, no video) grouped by pelvic level:
+Short practices, plus longer follow-along sessions (about 15–30 minutes of written steps, no video) grouped by level:
 
 - **Inlet** — top of the pelvis
 - **Mid** — middle
 - **Outlet** — bottom
 - **Release** — letting the pelvic floor soften
+- **Positioning** — forward-leaning rest, side-lying, gentle hips, pelvic tilts, and optional hands-and-knees. These do not turn a baby.
 
 No single move opens the whole pelvis. Sessions include modifications and notes for simple home items (a chair, and optionally a birth ball, yoga block, or light band). They include stop-if cues. A kegel routine is not the point of the release sessions. Ask your care provider which movement fits you.
 
@@ -74,9 +82,9 @@ Routes are served under `/doula-edu/`:
 - `/` Welcome — first-run setup, and where you change your stage later
 - `/today` Today — today's Prep card, plus the next lesson and movement session for that stage
 - `/prep` Prep — the 8-week path, with room to mark earlier days and add a note
-- `/learn` Learn — education modules by track
+- `/learn` Learn — education modules by track, including fetal position, everyday habits, nutrition, labor readiness, and evidence
 - `/learn/[id]` Lesson — read, mark complete, add a note
-- `/move` Move — sessions filtered by pelvic level, plus short practices
+- `/move` Move — sessions filtered by pelvic level or Positioning, plus short practices
 - `/move/[id]` Session — written steps, equipment, modifications, stop-if lines, and a provider prompt
 - `/progress` Progress — prep streak and days done, lesson and movement completions, notes, and the wellness reminder
 

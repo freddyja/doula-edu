@@ -12,6 +12,11 @@ export const TRACK_IDS = [
   "stages",
   "labor",
   "comfort",
+  "position",
+  "habits",
+  "nourishment",
+  "readiness",
+  "evidence",
   "mind",
   "partner",
   "planning",
@@ -24,7 +29,7 @@ export const PILLAR_IDS = ["mindset", "movement", "nutrition", "partner", "birth
 
 export type PillarId = (typeof PILLAR_IDS)[number];
 
-export const PELVIC_LEVEL_IDS = ["inlet", "mid", "outlet", "release"] as const;
+export const PELVIC_LEVEL_IDS = ["inlet", "mid", "outlet", "release", "positioning"] as const;
 
 export type PelvicLevel = (typeof PELVIC_LEVEL_IDS)[number];
 
