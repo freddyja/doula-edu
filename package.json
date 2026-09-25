@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --experimental-strip-types --test lib/content.test.ts lib/prep.test.ts lib/base-path.test.ts",
+    "test": "node --experimental-strip-types --test lib/content.test.ts lib/prep.test.ts lib/base-path.test.ts lib/install.test.ts",
     "icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {

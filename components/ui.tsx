@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const buttonBase =
-  "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-base font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50";
+  "pressable inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-base font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50";
 
 const variants = {
   primary: "bg-accent text-accent-ink hover:bg-accent-strong",
@@ -37,27 +37,29 @@ export function ButtonLink({
   );
 }
 
-export function PageHeader({
-  eyebrow,
-  title,
+export function ScreenIntro({ children }: { children: React.ReactNode }) {
+  return <p className="text-[0.9375rem] leading-snug text-balance text-muted">{children}</p>;
+}
+
+export function StickyHeading({
+  id,
   children,
 }: {
-  eyebrow?: string;
-  title: string;
-  children?: React.ReactNode;
+  id?: string;
+  children: React.ReactNode;
 }) {
   return (
-    <header className="mb-6">
-      {eyebrow ? <p className="mb-2 text-sm font-semibold text-accent">{eyebrow}</p> : null}
-      <h1 className="font-display text-[2rem] leading-tight text-balance text-ink sm:text-4xl">
-        {title}
-      </h1>
-      {children ? (
-        <div className="mt-3 max-w-prose text-lg leading-relaxed text-muted">{children}</div>
-      ) : null}
-    </header>
+    <h2
+      id={id}
+      className="sticky top-0 z-10 -mx-4 border-b border-line/80 bg-bg/95 px-4 py-2 font-display text-xl leading-tight backdrop-blur"
+    >
+      {children}
+    </h2>
   );
 }
+
+const cardSurface =
+  "rounded-2xl border border-line bg-surface p-4 shadow-[0_8px_24px_-18px_rgba(42,36,30,0.45)]";
 
 export function Card({
   children,
@@ -66,17 +68,10 @@ export function Card({
   children: React.ReactNode;
   className?: string;
 }) {
-  return (
-    <section
-      className={`rounded-3xl border border-line bg-surface p-5 shadow-[0_10px_30px_-22px_rgba(42,36,30,0.45)] ${className}`}
-    >
-      {children}
-    </section>
-  );
+  return <section className={`${cardSurface} ${className}`}>{children}</section>;
 }
 
-export const cardLinkClass =
-  "block rounded-3xl border border-line bg-surface p-5 shadow-[0_10px_30px_-22px_rgba(42,36,30,0.45)] transition-colors hover:border-accent";
+export const cardLinkClass = `pressable block ${cardSurface} transition-colors hover:border-accent active:bg-accent-soft`;
 
 export function Badge({
   children,

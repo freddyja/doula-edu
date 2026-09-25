@@ -6,6 +6,7 @@ import { Button, Card, LoadingState, StorageError } from "@/components/ui";
 import { STAGES } from "@/lib/stages";
 import { saveSetup, useDoulaState } from "@/lib/store";
 import type { StageId } from "@/lib/types";
+import { WELLNESS_LONG } from "@/lib/wellness";
 
 export function WelcomeScreen() {
   const { ready, profile, storageError } = useDoulaState();
@@ -50,26 +51,24 @@ function WelcomeForm({
   }
 
   return (
-    <div className="space-y-6">
-      <header>
-        <p className="mb-2 text-sm font-semibold text-accent">Prenatal and postpartum</p>
-        <h1 className="font-display text-4xl leading-tight text-balance sm:text-5xl">
+    <div className="space-y-4">
+      <header className="space-y-3">
+        <p className="inline-flex rounded-full bg-accent-soft px-3 py-1 text-xs font-bold leading-snug text-accent">
+          Wellness support only · not medical advice
+        </p>
+        <h1 className="font-display text-3xl leading-tight text-balance">
           Prep a little. Learn a little. Move a little.
         </h1>
-        <p className="mt-4 text-lg leading-relaxed text-muted">
+        <p className="text-base leading-relaxed text-muted">
           An optional daily prep card, short lessons, and gentle movement for the stage you
           choose. Nothing here is a personal plan, and nothing is sent to a server.
         </p>
       </header>
 
-      <form onSubmit={onSubmit} className="space-y-5">
+      <form onSubmit={onSubmit} className="space-y-4">
         <Card>
-          <h2 className="font-display text-2xl">Wellness disclaimer</h2>
-          <p className="mt-3 text-base leading-relaxed">
-            Doula offers general education and gentle movement ideas. It is not medical advice, not
-            a diagnosis, and not a treatment plan. It does not replace prenatal care, postpartum
-            care, or your baby&apos;s pediatric visits. Follow your own care provider.
-          </p>
+          <h2 className="font-display text-xl">Wellness disclaimer</h2>
+          <p className="mt-2 text-base leading-relaxed">{WELLNESS_LONG}</p>
           <label className="mt-4 flex min-h-12 cursor-pointer items-start gap-3 rounded-2xl border border-line bg-bg px-4 py-3">
             <input
               type="checkbox"
@@ -84,17 +83,17 @@ function WelcomeForm({
         </Card>
 
         <fieldset>
-          <legend className="font-display text-2xl">Where are you in the journey?</legend>
-          <p className="mt-2 text-base leading-relaxed text-muted">
+          <legend className="font-display text-xl">Where are you in the journey?</legend>
+          <p className="mt-1 text-sm leading-relaxed text-muted">
             This only filters lessons and sessions. It is not a medical category.
           </p>
-          <div className="mt-4 grid gap-3">
+          <div className="mt-3 grid gap-2">
             {STAGES.map((item) => {
               const selected = stage === item.id;
               return (
                 <label
                   key={item.id}
-                  className={`flex min-h-16 cursor-pointer items-center gap-3 rounded-3xl border px-4 py-3 ${
+                  className={`flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border px-3 py-2.5 ${
                     selected ? "border-accent bg-accent-soft" : "border-line bg-surface"
                   }`}
                 >
@@ -126,7 +125,7 @@ function WelcomeForm({
             {error}
           </p>
         ) : null}
-        <Button type="submit" disabled={!canContinue || saving} className="w-full sm:w-auto">
+        <Button type="submit" disabled={!canContinue || saving} className="w-full">
           {saving ? "Saving…" : "Continue to today"}
         </Button>
       </form>

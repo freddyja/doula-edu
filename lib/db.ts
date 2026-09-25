@@ -1,7 +1,7 @@
-import type { Completion, Profile } from "@/lib/types";
+import type { Completion, Profile, UiSettings } from "@/lib/types";
 
 const DB_NAME = "doula-edu";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 function openDb(): Promise<IDBDatabase> {
   if (typeof indexedDB === "undefined") {
@@ -18,6 +18,9 @@ function openDb(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains("completions")) {
         db.createObjectStore("completions", { keyPath: "id" });
       }
+      if (!db.objectStoreNames.contains("settings")) {
+        db.createObjectStore("settings", { keyPath: "id" });
+      }
     };
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error ?? new Error("Could not open storage."));
@@ -25,7 +28,7 @@ function openDb(): Promise<IDBDatabase> {
 }
 
 function withStore<T>(
-  storeName: "profile" | "completions",
+  storeName: "profile" | "completions" | "settings",
   mode: IDBTransactionMode,
   run: (store: IDBObjectStore) => IDBRequest<T>,
 ): Promise<T> {
@@ -74,4 +77,12 @@ export function writeCompletion(completion: Completion): Promise<IDBValidKey> {
 
 export function deleteCompletion(id: string): Promise<undefined> {
   return withStore("completions", "readwrite", (store) => store.delete(id));
+}
+
+export function readSettings(): Promise<UiSettings | undefined> {
+  return withStore("settings", "readonly", (store) => store.get("ui"));
+}
+
+export function writeSettings(settings: UiSettings): Promise<IDBValidKey> {
+  return withStore("settings", "readwrite", (store) => store.put(settings));
 }

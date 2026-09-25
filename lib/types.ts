@@ -96,3 +96,9 @@ export type Completion = {
   completedAt: string;
   note: string;
 };
+
+export type UiSettings = {
+  id: "ui";
+  installHintDismissed: boolean;
+  wellnessSheetDismissed: boolean;
+};

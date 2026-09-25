@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CompletePanel } from "@/components/complete-panel";
-import { Badge, Button, Card, PageHeader } from "@/components/ui";
+import { Badge, Button, Card, ScreenIntro, StickyHeading } from "@/components/ui";
 import { localDateKey } from "@/lib/dates";
 import { formatDateKey } from "@/lib/format";
 import {
@@ -66,12 +66,12 @@ export function PrepScreen() {
   }
 
   return (
-    <div className="space-y-6">
-      <PageHeader eyebrow="Optional" title="8-week prep">
-        One card each calendar day after you start. The week repeats five pillars: mindset,
-        movement, nutrition, partner support, and birth education. Movement and mindset appear
-        twice so the week has seven days.
-      </PageHeader>
+    <div className="space-y-4">
+      <ScreenIntro>
+        Optional. One card each calendar day after you start. The week repeats five pillars:
+        mindset, movement, nutrition, partner support, and birth education. Movement and mindset
+        appear twice so the week has seven days.
+      </ScreenIntro>
       <p className="text-base leading-relaxed text-muted">
         {started
           ? `${doneCount} of ${PREP_DAY_COUNT} days marked done · ${streak}-day streak.`
@@ -102,19 +102,17 @@ export function PrepScreen() {
         const days = prepDays.filter((day) => day.week === week.week);
         return (
           <section key={week.week} aria-labelledby={`prep-week-${week.week}`} className="space-y-3">
-            <div>
-              <h2 id={`prep-week-${week.week}`} className="font-display text-2xl">
-                Week {week.week} · {week.title}
-              </h2>
-              <p className="mt-1 text-base leading-relaxed text-muted">{week.blurb}</p>
-            </div>
+            <StickyHeading id={`prep-week-${week.week}`}>
+              Week {week.week} · {week.title}
+            </StickyHeading>
+            <p className="text-sm leading-snug text-muted">{week.blurb}</p>
             <ul className="space-y-3">
               {days.map((day) => {
                 const index = (day.week - 1) * 7 + day.day - 1;
                 const available = started ? prepDayIsOpen(index, cursor) : false;
                 const dateKey = started ? prepDateForIndex(started, index) : null;
                 return (
-                  <li key={day.id} id={day.id} className="scroll-mt-28">
+                  <li key={day.id} id={day.id} className="scroll-mt-4">
                     <PrepDayRow
                       day={day}
                       dateLabel={dateKey ? formatDateKey(dateKey) : ""}
@@ -169,7 +167,7 @@ function PrepDayRow({
   const pillar = pillarMeta(day.pillar);
   return (
     <article
-      className={`rounded-3xl border bg-surface p-5 ${
+      className={`rounded-2xl border bg-surface p-4 ${
         isToday ? "border-2 border-accent" : "border-line"
       } ${available ? "" : "opacity-80"}`}
     >
@@ -182,7 +180,7 @@ function PrepDayRow({
           {dateLabel ? ` · ${dateLabel}` : ""}
         </span>
       </div>
-      <h3 className="mt-3 font-display text-2xl leading-tight">{day.title}</h3>
+      <h3 className="mt-2 font-display text-xl leading-tight">{day.title}</h3>
       {open ? (
         <div className="mt-3 space-y-3">
           <p className="text-sm leading-relaxed text-muted">{pillar?.blurb}</p>

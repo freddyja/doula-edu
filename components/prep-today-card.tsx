@@ -24,7 +24,7 @@ import {
 import { Badge, Button, ButtonLink, Card } from "@/components/ui";
 
 const prominentCard =
-  "rounded-3xl border-2 border-accent bg-surface p-5 shadow-[0_10px_30px_-22px_rgba(42,36,30,0.45)]";
+  "rounded-2xl border-2 border-accent bg-surface p-4 shadow-[0_8px_24px_-18px_rgba(42,36,30,0.45)]";
 
 export function PrepTodayCard() {
   const { profile, completions } = useDoulaState();
@@ -111,7 +111,7 @@ export function PrepTodayCard() {
           {dateLabel ? ` · ${dateLabel}` : ""}
         </span>
       </div>
-      <h2 className="mt-3 font-display text-3xl leading-tight">{day.title}</h2>
+      <h2 className="mt-2 font-display text-2xl leading-tight">{day.title}</h2>
       <p className="mt-2 text-sm leading-relaxed text-muted">{pillar?.blurb}</p>
       <p className="mt-3 text-base leading-relaxed">{day.action}</p>
       <p className="mt-3 text-sm text-muted">

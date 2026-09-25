@@ -6,12 +6,14 @@ import {
   deleteCompletion,
   readCompletions,
   readProfile,
+  readSettings,
   writeCompletion,
   writeProfile,
+  writeSettings,
 } from "@/lib/db";
 import { completionKey } from "@/lib/format";
 import { todayPrepIndex } from "@/lib/prep";
-import type { Completion, CompletionKind, Profile, StageId } from "@/lib/types";
+import type { Completion, CompletionKind, Profile, StageId, UiSettings } from "@/lib/types";
 
 const NOTE_LIMIT = 400;
 
@@ -19,13 +21,21 @@ export type DoulaSnapshot = {
   ready: boolean;
   profile: Profile | null;
   completions: Completion[];
+  settings: UiSettings;
   storageError: string | null;
+};
+
+export const DEFAULT_SETTINGS: UiSettings = {
+  id: "ui",
+  installHintDismissed: false,
+  wellnessSheetDismissed: false,
 };
 
 const EMPTY: DoulaSnapshot = {
   ready: false,
   profile: null,
   completions: [],
+  settings: DEFAULT_SETTINGS,
   storageError: null,
 };
 
@@ -38,13 +48,22 @@ function emit(next: DoulaSnapshot) {
   for (const listener of listeners) listener();
 }
 
+function freshSettings(settings?: UiSettings): UiSettings {
+  return settings ? { ...settings } : { ...DEFAULT_SETTINGS };
+}
+
 async function hydrate() {
   try {
-    const [profile, completions] = await Promise.all([readProfile(), readCompletions()]);
+    const [profile, completions, settings] = await Promise.all([
+      readProfile(),
+      readCompletions(),
+      readSettings(),
+    ]);
     emit({
       ready: true,
       profile: profile ?? null,
       completions,
+      settings: freshSettings(settings),
       storageError: null,
     });
   } catch {
@@ -52,6 +71,7 @@ async function hydrate() {
       ready: true,
       profile: null,
       completions: [],
+      settings: freshSettings(),
       storageError:
         "This browser could not open on-device storage. Private mode sometimes blocks it. Your stage and notes stay on this device only.",
     });
@@ -155,6 +175,24 @@ export async function markComplete(
     ...snapshot,
     completions: [completion, ...snapshot.completions.filter((item) => item.id !== id)],
   });
+}
+
+async function saveSettings(patch: Partial<UiSettings>): Promise<void> {
+  const next: UiSettings = { ...snapshot.settings, ...patch, id: "ui" };
+  try {
+    await writeSettings(next);
+  } catch {
+    throw new Error("Could not save on this device. Check that site data is allowed, then try again.");
+  }
+  emit({ ...snapshot, settings: next, storageError: null, ready: true });
+}
+
+export function dismissInstallHint(): Promise<void> {
+  return saveSettings({ installHintDismissed: true });
+}
+
+export function dismissWellnessSheet(): Promise<void> {
+  return saveSettings({ wellnessSheetDismissed: true });
 }
 
 export async function removeCompletion(kind: CompletionKind, itemId: string): Promise<void> {
