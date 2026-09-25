@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Nunito, Outfit } from "next/font/google";
 import Script from "next/script";
 import { AppShell } from "@/components/app-shell";
+import { basePath } from "@/lib/base-path";
 import "./globals.css";
 
 const body = Nunito({
@@ -31,8 +32,8 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
   },
   icons: {
-    icon: [{ url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" }],
-    apple: [{ url: "/icons/icon-192.png", sizes: "192x192" }],
+    icon: [{ url: `${basePath}/icons/icon-192.png`, sizes: "192x192", type: "image/png" }],
+    apple: [{ url: `${basePath}/icons/icon-192.png`, sizes: "192x192" }],
   },
   other: {
     "apple-mobile-web-app-capable": "yes",

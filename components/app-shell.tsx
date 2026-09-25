@@ -104,6 +104,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               {children}
             </div>
           </main>
+          <div id="app-dock" />
           {hideTabs ? null : <BottomNav />}
         </div>
         {showWellness ? <WellnessSheet onDismiss={dismissWellnessSheet} /> : null}

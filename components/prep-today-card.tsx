@@ -192,15 +192,20 @@ function PrepOffer() {
     <section className={prominentCard}>
       <p className="text-xs font-bold text-accent">Prep · optional</p>
       <h2 className="mt-1 font-display text-xl font-extrabold tracking-tight">An 8-week daily card</h2>
-      <p className="mt-2 text-sm leading-relaxed">
-        One small card a day across mindset, movement, nutrition, partner support, and birth
-        education. Nutrition cards are wellness tips, not meal plans. The path is written with
-        pregnancy in mind. If you have already given birth, keep the cards that help and skip the
-        rest.
+      <p className="mt-1.5 text-sm leading-snug">
+        One small card a day. You can skip Prep and still use Learn and Move.
       </p>
-      <p className="mt-2 text-sm leading-relaxed text-muted">
-        You can skip Prep and still use Learn and Move. Nothing is sent to a server.
-      </p>
+      <details className="wellness-note mt-2">
+        <summary className="flex min-h-11 cursor-pointer items-center text-sm font-bold text-accent">
+          What a week includes
+        </summary>
+        <p className="pb-1 text-sm leading-relaxed text-muted">
+          Cards rotate through mindset, movement, nutrition, partner support, and birth education.
+          Nutrition cards are wellness tips, not meal plans. The path is written with pregnancy in
+          mind. If you have already given birth, keep the cards that help and skip the rest. Nothing
+          is sent to a server.
+        </p>
+      </details>
       <div className="mt-3">
         <StartButton label="Start 8-week prep" />
       </div>

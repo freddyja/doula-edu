@@ -83,7 +83,7 @@ function CompleteForm({
         void onSave();
       }}
     >
-      <label htmlFor="personal-note" className="block text-base font-semibold">
+      <label htmlFor="personal-note" className="flex min-h-11 items-center text-base font-semibold">
         Note for yourself
         <span className="font-normal text-muted"> (optional)</span>
       </label>

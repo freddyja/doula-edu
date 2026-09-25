@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { CheckIcon } from "@/components/icons";
 import { Button, LoadingState, StorageError } from "@/components/ui";
@@ -9,6 +10,14 @@ import { STAGES } from "@/lib/stages";
 import { saveSetup, useDoulaState } from "@/lib/store";
 import type { StageId } from "@/lib/types";
 import { WELLNESS_LONG, WELLNESS_SHORT } from "@/lib/wellness";
+
+function subscribeDock() {
+  return () => {};
+}
+
+function readDock() {
+  return document.getElementById("app-dock");
+}
 
 export function WelcomeScreen() {
   const { ready, profile, storageError } = useDoulaState();
@@ -20,6 +29,7 @@ export function WelcomeScreen() {
     <WelcomeForm
       initialStage={profile?.stage ?? null}
       initialAcknowledged={Boolean(profile?.disclaimerAcknowledged)}
+      dockedAboveTabs={Boolean(profile?.disclaimerAcknowledged && profile.stage)}
     />
   );
 }
@@ -27,15 +37,18 @@ export function WelcomeScreen() {
 function WelcomeForm({
   initialStage,
   initialAcknowledged,
+  dockedAboveTabs,
 }: {
   initialStage: StageId | null;
   initialAcknowledged: boolean;
+  dockedAboveTabs: boolean;
 }) {
   const router = useRouter();
   const [stage, setStage] = useState<StageId | null>(initialStage);
   const [acknowledged, setAcknowledged] = useState(initialAcknowledged);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const dock = useSyncExternalStore(subscribeDock, readDock, () => null);
   const canContinue = Boolean(stage) && acknowledged;
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -53,7 +66,7 @@ function WelcomeForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-3">
+    <form id="welcome-form" onSubmit={onSubmit} className="space-y-3">
       <header className="hero-block hero-terra px-4 pt-4 pb-5">
         <div className="flex items-center justify-between gap-3">
           <p className="text-xs font-bold">Wellness support only</p>
@@ -174,17 +187,30 @@ function WelcomeForm({
           {error}
         </p>
       ) : null}
-
-      <div className="sticky bottom-0 z-20 -mx-3.5 bg-gradient-to-t from-bg from-65% to-transparent px-3.5 pt-6 pb-1">
-        <Button type="submit" disabled={!canContinue || saving} className="w-full">
-          {saving ? "Saving…" : "Continue"}
-        </Button>
-        <p className="mt-2 text-center text-xs leading-snug text-muted">
-          {canContinue
-            ? "Saved on this device only. You can change your stage anytime."
-            : "Acknowledge the note and choose a stage to continue."}
-        </p>
-      </div>
+      {dock
+        ? createPortal(
+            <div
+              className={`border-t border-line bg-surface px-3.5 pt-2 ${
+                dockedAboveTabs ? "pb-2" : "pb-[max(0.5rem,env(safe-area-inset-bottom))]"
+              }`}
+            >
+              <Button
+                type="submit"
+                form="welcome-form"
+                disabled={!canContinue || saving}
+                className="w-full"
+              >
+                {saving ? "Saving…" : "Continue"}
+              </Button>
+              <p className="mt-1.5 text-center text-xs leading-snug text-muted">
+                {canContinue
+                  ? "Saved on this device only. You can change your stage anytime."
+                  : "Acknowledge the note and choose a stage to continue."}
+              </p>
+            </div>,
+            dock,
+          )
+        : null}
     </form>
   );
 }

@@ -52,7 +52,7 @@ export function InstallHint() {
   return (
     <section className="flex flex-wrap items-start gap-2 rounded-2xl bg-gold-soft px-3 py-2" aria-label="Add to Home Screen">
       <HomeIcon className="mt-1 size-4 shrink-0 text-gold" />
-      <p className="min-w-0 flex-1 pt-1 text-sm leading-snug text-ink">
+      <p className="line-clamp-2 min-w-0 flex-1 pt-1 text-sm leading-snug text-ink">
         <span className="font-bold">{copy.title}. </span>
         <span className="text-muted">{copy.body}</span>
       </p>
