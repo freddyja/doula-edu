@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s · Doula",
   },
   description:
-    "Prenatal and postpartum education and gentle movement. Educational wellness support, not medical advice.",
+    "Birth prep, lessons, and gentle movement. Educational wellness support, not medical advice.",
   applicationName: "Doula",
   appleWebApp: {
     capable: true,

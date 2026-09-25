@@ -28,6 +28,18 @@ export function LessonDetail({ lesson }: { lesson: Module }) {
           ))}
         </ul>
       </div>
+      {lesson.groups
+        ? lesson.groups.map((group) => (
+            <section key={group.heading}>
+              <h2 className="font-display text-2xl">{group.heading}</h2>
+              <ul className="mt-3 list-disc space-y-3 pl-5 text-base leading-relaxed">
+                {group.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </section>
+          ))
+        : null}
       <section className="rounded-3xl border border-line bg-surface p-5">
         <h2 className="font-display text-2xl">A small thing to try</h2>
         <p className="mt-3 text-base leading-relaxed">{lesson.tryThis}</p>

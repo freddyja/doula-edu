@@ -1,8 +1,9 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { modules, sessions } from "./content.ts";
+import { getModule, modules, sessions } from "./content.ts";
+import { prepDays } from "./prep.ts";
 import { forStage, nextIncomplete } from "./select.ts";
-import { STAGE_IDS, type StageId } from "./types.ts";
+import { PELVIC_LEVEL_IDS, STAGE_IDS, TRACK_IDS, type StageId } from "./types.ts";
 
 const banned = [
   "studies show",
@@ -18,9 +19,24 @@ const banned = [
 ];
 
 describe("seed content", () => {
-  it("stays within the MVP library size", () => {
-    assert.ok(modules.length >= 8 && modules.length <= 12);
-    assert.ok(sessions.length >= 6 && sessions.length <= 8);
+  it("covers prep, learn, and move", () => {
+    assert.ok(modules.length >= 24 && modules.length <= 40);
+    assert.ok(sessions.length >= 14 && sessions.length <= 24);
+    assert.equal(prepDays.length, 56);
+
+    for (const track of TRACK_IDS) {
+      assert.ok(
+        modules.some((item) => item.track === track),
+        track,
+      );
+    }
+
+    const packing = getModule("packing-list");
+    const plan = getModule("birth-plan-questions");
+    assert.ok(packing?.groups && packing.groups.length >= 3);
+    assert.ok(plan?.groups && plan.groups.length >= 4);
+    assert.match(`${plan?.summary} ${plan?.points.join(" ")}`, /provider/i);
+    assert.match(`${plan?.summary} ${plan?.points.join(" ")}`, /not a clinical/i);
   });
 
   it("uses unique ids and real stages", () => {
@@ -48,7 +64,34 @@ describe("seed content", () => {
       assert.match(session.providerCue, /provider/i);
       assert.match(session.providerCue, /talk/i);
       assert.ok(session.steps.length >= 3);
+
+      if (session.pelvicLevel) {
+        assert.ok(PELVIC_LEVEL_IDS.includes(session.pelvicLevel));
+        assert.ok(session.minutes >= 15 && session.minutes <= 30);
+        assert.ok(session.equipment && session.equipment.length >= 1);
+        assert.ok(session.modifications && session.modifications.length >= 2);
+        assert.ok(session.steps.length >= 5);
+        assert.match(session.pelvisNote ?? "", /does not open the whole pelvis/i);
+      } else {
+        assert.ok(session.minutes <= 12);
+      }
     }
+
+    for (const level of PELVIC_LEVEL_IDS) {
+      const levelSessions = sessions.filter((item) => item.pelvicLevel === level);
+      assert.ok(levelSessions.length >= 2, level);
+    }
+
+    const release = JSON.stringify(
+      sessions.filter((item) => item.pelvicLevel === "release"),
+    ).toLowerCase();
+    assert.match(release, /kegel/);
+    assert.match(release, /not the (point|goal)/);
+
+    const outlet = JSON.stringify(
+      sessions.filter((item) => item.pelvicLevel === "outlet"),
+    ).toLowerCase();
+    assert.match(outlet, /do not practice pushing|pushing practice/);
 
     for (const lesson of modules) {
       assert.ok(lesson.points.length >= 3);
@@ -56,9 +99,21 @@ describe("seed content", () => {
     }
   });
 
-  it("does not invent study citations or cure language", () => {
-    const blob = JSON.stringify({ modules, sessions }).toLowerCase();
+  it("does not invent study citations, cure language, or competitor brands", () => {
+    const blob = JSON.stringify({ modules, sessions, prepDays }).toLowerCase();
     for (const phrase of banned) {
+      assert.equal(blob.includes(phrase), false, phrase);
+    }
+    const brands = [
+      "spinning babies",
+      "hypnobirth",
+      "lamaze",
+      "bradley method",
+      "mama natural",
+      "birth boot camp",
+      "miles circuit",
+    ];
+    for (const phrase of brands) {
       assert.equal(blob.includes(phrase), false, phrase);
     }
   });

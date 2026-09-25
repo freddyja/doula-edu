@@ -13,8 +13,8 @@ export function RequireSetup({ children }: { children: React.ReactNode }) {
       <Card>
         <h1 className="font-display text-3xl text-balance">Start on the welcome page</h1>
         <p className="mt-3 text-lg leading-relaxed text-muted">
-          Choose a stage and acknowledge the disclaimer. Then Today, Learn, Move, and Progress
-          will open.
+          Choose a stage and acknowledge the disclaimer. Then Today, including optional prep,
+          plus Learn, Move, and Progress will open.
         </p>
         <div className="mt-5">
           <ButtonLink href="/">Go to welcome</ButtonLink>

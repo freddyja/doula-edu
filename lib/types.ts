@@ -8,9 +8,30 @@ export const STAGE_IDS = [
 
 export type StageId = (typeof STAGE_IDS)[number];
 
-export const TRACK_IDS = ["stages", "comfort", "partner", "newborn"] as const;
+export const TRACK_IDS = [
+  "stages",
+  "labor",
+  "comfort",
+  "mind",
+  "partner",
+  "planning",
+  "newborn",
+] as const;
 
 export type TrackId = (typeof TRACK_IDS)[number];
+
+export const PILLAR_IDS = ["mindset", "movement", "nutrition", "partner", "birth"] as const;
+
+export type PillarId = (typeof PILLAR_IDS)[number];
+
+export const PELVIC_LEVEL_IDS = ["inlet", "mid", "outlet", "release"] as const;
+
+export type PelvicLevel = (typeof PELVIC_LEVEL_IDS)[number];
+
+export type ModuleGroup = {
+  heading: string;
+  items: string[];
+};
 
 export type Module = {
   id: string;
@@ -20,6 +41,7 @@ export type Module = {
   minutes: number;
   summary: string;
   points: string[];
+  groups?: ModuleGroup[];
   tryThis: string;
   priority: number;
 };
@@ -35,20 +57,36 @@ export type Session = {
   stages: StageId[];
   minutes: number;
   focus: "Breathing" | "Gentle mobility" | "Pelvic floor awareness";
+  pelvicLevel?: PelvicLevel;
   summary: string;
+  pelvisNote?: string;
+  equipment?: string[];
+  modifications?: string[];
   steps: SessionStep[];
   stopIf: string[];
   providerCue: string;
   priority: number;
 };
 
-export type CompletionKind = "lesson" | "session";
+export type PrepDay = {
+  id: string;
+  week: number;
+  day: number;
+  pillar: PillarId;
+  title: string;
+  action: string;
+  learnId?: string;
+  moveId?: string;
+};
+
+export type CompletionKind = "lesson" | "session" | "prep";
 
 export type Profile = {
   id: "profile";
   stage: StageId;
   disclaimerAcknowledged: true;
   acknowledgedAt: string;
+  prepStartedOn?: string | null;
 };
 
 export type Completion = {

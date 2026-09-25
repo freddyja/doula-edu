@@ -1,3 +1,5 @@
+import { extraModules } from "./extra-modules.ts";
+import { pelvicSessions } from "./pelvic-sessions.ts";
 import type { Module, Session } from "./types";
 
 const pauseForWorry =
@@ -9,7 +11,7 @@ const pauseForStrain =
 const talkWithProvider =
   "Talk with your care provider about which movement fits you right now, and anytime something about your body worries you. This session is general education, not a plan for your pregnancy or recovery.";
 
-export const modules: Module[] = [
+const baseModules: Module[] = [
   {
     id: "early-weeks",
     title: "The early weeks, in plain language",
@@ -240,7 +242,7 @@ export const modules: Module[] = [
   },
 ];
 
-export const sessions: Session[] = [
+const baseSessions: Session[] = [
   {
     id: "slow-breathing",
     title: "Slow breathing",
@@ -367,7 +369,7 @@ export const sessions: Session[] = [
     minutes: 7,
     focus: "Pelvic floor awareness",
     summary:
-      "A few gentle lifts and full releases. This is awareness, not a strength plan and not a diagnosis.",
+      "A few gentle lifts and full releases. Letting go matters as much as any lift. This is awareness, not a strength plan, not a kegel program for birth, and not a diagnosis.",
     steps: [
       {
         title: "Choose a position",
@@ -375,7 +377,7 @@ export const sessions: Session[] = [
       },
       {
         title: "A small lift",
-        body: "Imagine the muscles you would use to stop urine or hold back gas drawing gently up and in. Use very little effort. If your belly grips, your breath holds, or you feel pressure downward, let go. That is too much effort for this practice.",
+        body: "Imagine the muscles you would use to stop urine or hold back gas drawing gently up and in. Use very little effort. If your belly grips, your breath holds, or you feel pressure downward, let go. That is too much effort for this practice. Skip the lift if you prefer. A kegel is not required to prepare for birth.",
       },
       {
         title: "Release for longer",
@@ -539,6 +541,9 @@ export const sessions: Session[] = [
     priority: 50,
   },
 ];
+
+export const modules: Module[] = [...baseModules, ...extraModules];
+export const sessions: Session[] = [...baseSessions, ...pelvicSessions];
 
 const moduleById = new Map(modules.map((item) => [item.id, item]));
 const sessionById = new Map(sessions.map((item) => [item.id, item]));

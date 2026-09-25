@@ -54,11 +54,11 @@ function WelcomeForm({
       <header>
         <p className="mb-2 text-sm font-semibold text-accent">Prenatal and postpartum</p>
         <h1 className="font-display text-4xl leading-tight text-balance sm:text-5xl">
-          Learn a little. Move a little. Then rest.
+          Prep a little. Learn a little. Move a little.
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-muted">
-          Short lessons and gentle movement for the stage you choose. Nothing here is a personal
-          plan, and nothing is sent to a server.
+          An optional daily prep card, short lessons, and gentle movement for the stage you
+          choose. Nothing here is a personal plan, and nothing is sent to a server.
         </p>
       </header>
 
