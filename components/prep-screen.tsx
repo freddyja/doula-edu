@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CompletePanel } from "@/components/complete-panel";
-import { Badge, Button, Card, ScreenIntro, StickyHeading } from "@/components/ui";
+import { Badge, Button, Card, ScreenHero, StickyHeading } from "@/components/ui";
+import { Glyph, pillarVisual, tileClass } from "@/components/visual";
 import { localDateKey } from "@/lib/dates";
 import { formatDateKey } from "@/lib/format";
 import {
@@ -18,7 +19,7 @@ import {
   todayPrepIndex,
   type PrepCursor,
 } from "@/lib/prep";
-import { pillarMeta } from "@/lib/stages";
+import { PILLARS, pillarMeta } from "@/lib/stages";
 import {
   completedIdSet,
   findCompletion,
@@ -66,16 +67,27 @@ export function PrepScreen() {
   }
 
   return (
-    <div className="space-y-4">
-      <ScreenIntro>
-        Optional. One card each calendar day after you start. The week repeats five pillars:
-        mindset, movement, nutrition, partner support, and birth education. Movement and mindset
-        appear twice so the week has seven days.
-      </ScreenIntro>
-      <p className="text-base leading-relaxed text-muted">
+    <div className="space-y-3">
+      <ScreenHero tone="blush" title="Prep" kicker="Optional">
+        One card a day for eight weeks. Movement and mindset each show up twice.
+      </ScreenHero>
+      <ul className="flex flex-wrap gap-1.5">
+        {PILLARS.map((pillar) => {
+          const visual = pillarVisual(pillar.id);
+          return (
+            <li
+              key={pillar.id}
+              className={`rounded-full px-2.5 py-1 text-xs font-bold ${tileClass[visual.tone]}`}
+            >
+              {pillar.label}
+            </li>
+          );
+        })}
+      </ul>
+      <p className="text-sm leading-snug text-muted">
         {started
-          ? `${doneCount} of ${PREP_DAY_COUNT} days marked done · ${streak}-day streak.`
-          : "Prep has not been started on this device."}{" "}
+          ? `${doneCount} of ${PREP_DAY_COUNT} days marked done · ${streak}-day streak. `
+          : "Prep has not been started on this device. "}
         Missed days stay here so you can mark them later. Future days wait.
       </p>
 
@@ -102,7 +114,7 @@ export function PrepScreen() {
         const days = prepDays.filter((day) => day.week === week.week);
         return (
           <section key={week.week} aria-labelledby={`prep-week-${week.week}`} className="space-y-3">
-            <StickyHeading id={`prep-week-${week.week}`}>
+            <StickyHeading id={`prep-week-${week.week}`} tone="blush">
               Week {week.week} · {week.title}
             </StickyHeading>
             <p className="text-sm leading-snug text-muted">{week.blurb}</p>
@@ -165,22 +177,34 @@ function PrepDayRow({
   onQuickMark: () => void;
 }) {
   const pillar = pillarMeta(day.pillar);
+  const visual = pillarVisual(day.pillar);
   return (
     <article
-      className={`rounded-2xl border bg-surface p-4 ${
+      className={`rounded-2xl border bg-surface p-3 shadow-card ${
         isToday ? "border-2 border-accent" : "border-line"
       } ${available ? "" : "opacity-80"}`}
     >
-      <div className="flex flex-wrap items-center gap-2 text-sm">
-        <Badge>{pillar?.label ?? day.pillar}</Badge>
-        {done ? <Badge tone="plain">Done</Badge> : null}
-        {isToday ? <Badge tone="plain">Today</Badge> : null}
-        <span className="text-muted">
-          Day {day.day}
-          {dateLabel ? ` · ${dateLabel}` : ""}
+      <div className="flex items-center gap-3">
+        <span
+          className={`grid size-11 shrink-0 place-items-center rounded-2xl ${tileClass[visual.tone]}`}
+        >
+          <Glyph name={visual.glyph} className="size-5" />
         </span>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-1.5 text-xs">
+            <span className="font-bold text-muted">
+              Day {day.day}
+              {dateLabel ? ` · ${dateLabel}` : ""}
+            </span>
+            <Badge>{pillar?.label ?? day.pillar}</Badge>
+            {done ? <Badge tone="plain">Done</Badge> : null}
+            {isToday ? <Badge tone="plain">Today</Badge> : null}
+          </div>
+          <h3 className="mt-0.5 font-display text-base font-extrabold leading-tight tracking-tight">
+            {day.title}
+          </h3>
+        </div>
       </div>
-      <h3 className="mt-2 font-display text-xl leading-tight">{day.title}</h3>
       {open ? (
         <div className="mt-3 space-y-3">
           <p className="text-sm leading-relaxed text-muted">{pillar?.blurb}</p>
@@ -239,18 +263,18 @@ function StartBlock() {
   }
 
   return (
-    <Card>
-      <h2 className="font-display text-2xl">Start when you want</h2>
-      <p className="mt-2 text-base leading-relaxed">
+    <Card className="bg-blush-soft">
+      <h2 className="font-display text-xl font-extrabold tracking-tight">Start when you want</h2>
+      <p className="mt-1.5 text-sm leading-relaxed">
         Day 1 is the day you tap start. The rhythm each week is{" "}
         {PREP_RHYTHM.map((pillar) => pillarMeta(pillar)?.label ?? pillar).join(", ")}.
       </p>
-      <p className="mt-2 text-base leading-relaxed text-muted">
+      <p className="mt-1.5 text-sm leading-relaxed text-muted">
         Nutrition tips are general wellness, not a meal plan. Movement cards are short. Stop if
         something feels wrong.
       </p>
-      <div className="mt-4">
-        <Button type="button" disabled={pending} onClick={() => void onStart()}>
+      <div className="mt-3">
+        <Button type="button" disabled={pending} onClick={() => void onStart()} className="w-full">
           {pending ? "Saving…" : "Start 8-week prep"}
         </Button>
       </div>

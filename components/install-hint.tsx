@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { HomeIcon } from "@/components/icons";
-import { Button } from "@/components/ui";
+import { CloseIcon, HomeIcon } from "@/components/icons";
 import {
   detectInstallPlatform,
   installInstructions,
@@ -51,29 +50,26 @@ export function InstallHint() {
   }
 
   return (
-    <section
-      className="rounded-2xl border border-line bg-surface p-4 shadow-[0_8px_24px_-18px_rgba(42,36,30,0.45)]"
-      aria-label="Add to Home Screen"
-    >
-      <div className="flex items-start gap-3">
-        <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-accent-soft text-accent">
-          <HomeIcon className="size-5" />
-        </span>
-        <div className="min-w-0">
-          <h2 className="font-display text-xl leading-tight">{copy.title}</h2>
-          <p className="mt-1 text-sm leading-relaxed text-muted">{copy.body}</p>
-        </div>
-      </div>
+    <section className="flex flex-wrap items-start gap-2 rounded-2xl bg-gold-soft px-3 py-2" aria-label="Add to Home Screen">
+      <HomeIcon className="mt-1 size-4 shrink-0 text-gold" />
+      <p className="line-clamp-2 min-w-0 flex-1 pt-1 text-sm leading-snug text-ink">
+        <span className="font-bold">{copy.title}. </span>
+        <span className="text-muted">{copy.body}</span>
+      </p>
+      <button
+        type="button"
+        className="pressable -mr-1 grid size-11 shrink-0 place-items-center rounded-full text-muted"
+        aria-label="Not now"
+        disabled={saving}
+        onClick={() => void onDismiss()}
+      >
+        <CloseIcon className="size-4" />
+      </button>
       {error ? (
-        <p className="mt-3 text-sm text-accent" role="alert">
+        <p className="basis-full text-xs text-accent" role="alert">
           {error}
         </p>
       ) : null}
-      <div className="mt-2 flex justify-end">
-        <Button type="button" variant="quiet" disabled={saving} onClick={() => void onDismiss()}>
-          {saving ? "Saving…" : "Not now"}
-        </Button>
-      </div>
     </section>
   );
 }

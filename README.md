@@ -65,7 +65,7 @@ In the repository, set **Settings → Pages → Build and deployment → Source*
 
 No account, no backend, and no network calls for your notes. Stage, the disclaimer acknowledgment, prep-day completions, lesson and session completions, notes, and a few interface choices (the install hint and the one-time wellness reminder) stay in IndexedDB on this device.
 
-The interface is a phone column on every screen size, with bottom tabs for Today, Learn, Move, and Progress.
+The interface is a phone column on every screen size, with a compact top bar, illustrated screen heroes, and a solid bottom tab bar for Today, Learn, Move, and Progress.
 
 ## Screens
 

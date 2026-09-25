@@ -11,8 +11,8 @@ export function RequireSetup({ children }: { children: React.ReactNode }) {
   if (!profile?.disclaimerAcknowledged || !profile.stage) {
     return (
       <Card>
-        <h1 className="font-display text-3xl text-balance">Start on the welcome page</h1>
-        <p className="mt-3 text-lg leading-relaxed text-muted">
+        <h1 className="font-display text-2xl font-extrabold tracking-tight text-balance">Start on the welcome page</h1>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
           Choose a stage and acknowledge the disclaimer. Then Today, including optional prep,
           plus Learn, Move, and Progress will open.
         </p>

@@ -77,13 +77,13 @@ function CompleteForm({
 
   return (
     <form
-      className="rounded-2xl border border-line bg-surface p-4"
+      className="rounded-2xl border border-line bg-surface p-3.5 shadow-card"
       onSubmit={(event) => {
         event.preventDefault();
         void onSave();
       }}
     >
-      <label htmlFor="personal-note" className="block text-base font-semibold">
+      <label htmlFor="personal-note" className="flex min-h-11 items-center text-base font-semibold">
         Note for yourself
         <span className="font-normal text-muted"> (optional)</span>
       </label>
@@ -94,7 +94,7 @@ function CompleteForm({
         rows={4}
         onChange={(event) => setNote(event.target.value)}
         placeholder="A reminder, a question for your provider, or how this felt."
-        className="mt-2 w-full rounded-2xl border border-line bg-bg px-4 py-3 text-base leading-relaxed text-ink"
+        className="mt-2 w-full rounded-xl border border-line bg-bg px-3 py-2.5 text-base leading-relaxed text-ink"
       />
       <p className="mt-1 text-sm text-muted">
         {note.length}/{NOTE_LIMIT}. Saved only on this device.

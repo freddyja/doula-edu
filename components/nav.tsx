@@ -37,8 +37,8 @@ export function BottomNav() {
               <Link
                 href={item.href}
                 aria-current={current ? "page" : undefined}
-                className={`pressable flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-2xl px-1 text-xs font-bold leading-none ${
-                  current ? "bg-accent-soft text-accent" : "text-muted"
+                className={`pressable flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-2xl px-1 text-[0.7rem] font-extrabold leading-none ${
+                  current ? "bg-accent text-accent-ink" : "text-muted"
                 }`}
               >
                 <Icon active={current} className="size-6" />
