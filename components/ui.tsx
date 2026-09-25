@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight } from "@/components/icons";
+import { CheckIcon, ChevronRight } from "@/components/icons";
 import { Glyph, HeroArt, dotClass, heroClass, tileClass, type Tone } from "@/components/visual";
 
 const buttonBase =
@@ -46,7 +46,7 @@ export function ScreenHero({
   children,
 }: {
   title: string;
-  tone: Exclude<Tone, "gold">;
+  tone: Tone;
   kicker?: string;
   children?: React.ReactNode;
 }) {
@@ -115,6 +115,80 @@ export function Card({
   className?: string;
 }) {
   return <section className={`${cardSurface} ${className}`}>{children}</section>;
+}
+
+export function SectionHero({
+  id,
+  title,
+  tone,
+  children,
+}: {
+  id?: string;
+  title: string;
+  tone: Tone;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div className={`${heroClass[tone]} flex items-center gap-3 px-3.5 py-3`}>
+      <div className="min-w-0 flex-1">
+        <h2 id={id} className="font-display text-[1.35rem] font-extrabold leading-none tracking-tight">
+          {title}
+        </h2>
+        {children ? <div className="mt-1.5 text-xs font-semibold leading-snug">{children}</div> : null}
+      </div>
+      <div className="h-14 w-16 shrink-0" aria-hidden="true">
+        <HeroArt tone={tone} />
+      </div>
+    </div>
+  );
+}
+
+export function ListGroup({ children }: { children: React.ReactNode }) {
+  return (
+    <ul className="divide-y divide-line overflow-hidden rounded-[1.25rem] border border-line bg-surface shadow-card">
+      {children}
+    </ul>
+  );
+}
+
+export function PosterRow({
+  href,
+  title,
+  meta,
+  tone = "terra",
+  glyph,
+  done = false,
+}: {
+  href: string;
+  title: string;
+  meta: string;
+  tone?: Tone;
+  glyph: Parameters<typeof Glyph>[0]["name"];
+  done?: boolean;
+}) {
+  return (
+    <Link href={href} className="pressable flex min-h-[4.75rem] items-center gap-3 px-2.5 py-2">
+      <span
+        className={`relative grid size-16 shrink-0 place-items-center overflow-hidden rounded-2xl ${heroClass[tone]}`}
+      >
+        <span className="absolute -top-3 -right-3 size-10 rounded-full bg-white/20" />
+        <span className="absolute -bottom-3 -left-3 size-8 rounded-full bg-white/15" />
+        <Glyph name={glyph} className="relative size-7" />
+        {done ? (
+          <span className="absolute right-1 bottom-1 grid size-4 place-items-center rounded-full bg-accent-ink text-ink">
+            <CheckIcon className="size-3" />
+          </span>
+        ) : null}
+      </span>
+      <span className="min-w-0 flex-1">
+        <h3 className="line-clamp-2 font-display text-base font-extrabold leading-tight tracking-tight text-ink">
+          {title}
+        </h3>
+        <span className="mt-1 block text-xs font-bold text-muted">{meta}</span>
+      </span>
+      <ChevronRight className="size-5 shrink-0 text-muted" />
+    </Link>
+  );
 }
 
 export function MediaRow({
