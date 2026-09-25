@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { InstallHint } from "@/components/install-hint";
+import { PrepTodayCard } from "@/components/prep-today-card";
 import { modules, sessions } from "@/lib/content";
-import { trackTitle } from "@/lib/stages";
+import { pelvicLevelMeta, trackTitle } from "@/lib/stages";
 import { nextIncomplete } from "@/lib/select";
 import { completedIdSet, useDoulaState } from "@/lib/store";
 import { ButtonLink, Card, ScreenIntro, cardLinkClass } from "@/components/ui";
@@ -19,10 +20,11 @@ export function TodayScreen() {
   return (
     <div className="space-y-3">
       <ScreenIntro>
-        One lesson and one movement session for the stage you picked. This is not a plan made for
-        you.
+        Today&apos;s prep card, then the next lesson and movement session for this stage. This is
+        not a plan made for you.
       </ScreenIntro>
       <InstallHint />
+      <PrepTodayCard />
 
       {nextLesson ? (
         <Link href={`/learn/${nextLesson.id}`} className={cardLinkClass}>
@@ -53,7 +55,12 @@ export function TodayScreen() {
           <h2 className="mt-1 font-display text-xl leading-tight">{nextSession.title}</h2>
           <p className="mt-1.5 text-sm leading-relaxed text-muted">{nextSession.summary}</p>
           <p className="mt-2 text-sm text-muted">
-            About {nextSession.minutes} min · {nextSession.focus}
+            About {nextSession.minutes} min
+            {nextSession.pelvicLevel
+              ? ` · ${pelvicLevelMeta(nextSession.pelvicLevel)?.title}`
+              : ""}
+            {" · "}
+            {nextSession.focus}
           </p>
         </Link>
       ) : (

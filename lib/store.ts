@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { localDateKey } from "@/lib/dates";
 import {
   deleteCompletion,
   readCompletions,
@@ -11,6 +12,7 @@ import {
   writeSettings,
 } from "@/lib/db";
 import { completionKey } from "@/lib/format";
+import { todayPrepIndex } from "@/lib/prep";
 import type { Completion, CompletionKind, Profile, StageId, UiSettings } from "@/lib/types";
 
 const NOTE_LIMIT = 400;
@@ -123,7 +125,25 @@ export async function saveSetup(stage: StageId): Promise<void> {
     stage,
     disclaimerAcknowledged: true,
     acknowledgedAt: snapshot.profile?.acknowledgedAt ?? new Date().toISOString(),
+    prepStartedOn: snapshot.profile?.prepStartedOn ?? null,
   };
+  try {
+    await writeProfile(profile);
+  } catch {
+    throw new Error("Could not save on this device. Check that site data is allowed, then try again.");
+  }
+  emit({ ...snapshot, profile, storageError: null, ready: true });
+}
+
+export async function startPrepPath(): Promise<void> {
+  const current = snapshot.profile;
+  if (!current) {
+    throw new Error("Choose a stage on the welcome page first.");
+  }
+  if (current.prepStartedOn && todayPrepIndex(current.prepStartedOn, localDateKey()) !== "invalid") {
+    return;
+  }
+  const profile: Profile = { ...current, prepStartedOn: localDateKey() };
   try {
     await writeProfile(profile);
   } catch {

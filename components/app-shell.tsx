@@ -23,6 +23,7 @@ function routeChrome(pathname: string): Chrome {
   if (path === "/learn") return { mode: "tab", title: "Learn" };
   if (path === "/move") return { mode: "tab", title: "Move" };
   if (path === "/progress") return { mode: "tab", title: "Progress" };
+  if (path === "/prep") return { mode: "tab", title: "Prep" };
   if (path.startsWith("/learn/")) return { mode: "detail", backHref: "/learn", backLabel: "Learn" };
   if (path.startsWith("/move/")) return { mode: "detail", backHref: "/move", backLabel: "Move" };
   return { mode: "plain", title: "Doula" };

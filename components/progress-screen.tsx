@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { getModule, getSession } from "@/lib/content";
+import { localDateKey } from "@/lib/dates";
 import { formatWhen } from "@/lib/format";
-import { stageLabel } from "@/lib/stages";
-import { useDoulaState } from "@/lib/store";
+import { PREP_DAY_COUNT, getPrepDay, prepDaysDone, prepStreak } from "@/lib/prep";
+import { pillarMeta, stageLabel } from "@/lib/stages";
+import { completedIdSet, useDoulaState } from "@/lib/store";
 import { ButtonLink, Card, ScreenIntro, StickyHeading } from "@/components/ui";
 import type { Completion } from "@/lib/types";
 import { WELLNESS_SHORT } from "@/lib/wellness";
@@ -19,11 +21,19 @@ export function ProgressScreen() {
   const movement = completions
     .filter((item) => item.kind === "session")
     .toSorted((a, b) => b.completedAt.localeCompare(a.completedAt));
+  const prep = completions
+    .filter((item) => item.kind === "prep")
+    .toSorted((a, b) => a.itemId.localeCompare(b.itemId));
+  const prepIds = completedIdSet(completions, "prep");
+  const prepDone = prepDaysDone(prepIds);
+  const started = profile.prepStartedOn;
+  const streak = started ? prepStreak(started, prepIds, localDateKey()) : 0;
 
   return (
     <div className="space-y-5">
       <ScreenIntro>
-        {lessons.length} {lessons.length === 1 ? "lesson" : "lessons"} and {movement.length}{" "}
+        {prepDone} prep {prepDone === 1 ? "day" : "days"}, {lessons.length}{" "}
+        {lessons.length === 1 ? "lesson" : "lessons"}, and {movement.length}{" "}
         {movement.length === 1 ? "movement session" : "movement sessions"} marked done on this
         device.
       </ScreenIntro>
@@ -34,6 +44,32 @@ export function ProgressScreen() {
         </Link>
         .
       </p>
+
+      <section aria-labelledby="progress-prep" className="space-y-2">
+        <StickyHeading id="progress-prep">Prep</StickyHeading>
+        <p className="text-sm leading-relaxed text-muted">
+          {started
+            ? `${prepDone} of ${PREP_DAY_COUNT} days · ${streak}-day streak.`
+            : "Prep has not been started on this device."}
+        </p>
+        <div>
+          <ButtonLink href="/prep" variant="secondary">
+            Open the 8-week path
+          </ButtonLink>
+        </div>
+        <CompletionList
+          items={prep}
+          empty="When you mark a prep card done, it will show up here with your note."
+          hrefFor={(item) => `/prep#${item.itemId}`}
+          titleFor={(item) => getPrepDay(item.itemId)?.title ?? "Prep card"}
+          detailFor={(item) => {
+            const day = getPrepDay(item.itemId);
+            if (!day) return null;
+            const pillar = pillarMeta(day.pillar)?.label ?? day.pillar;
+            return `Week ${day.week} · Day ${day.day} · ${pillar}`;
+          }}
+        />
+      </section>
 
       <section aria-labelledby="progress-lessons" className="space-y-2">
         <StickyHeading id="progress-lessons">Lessons</StickyHeading>
@@ -77,28 +113,33 @@ function CompletionList({
   empty,
   hrefFor,
   titleFor,
+  detailFor,
 }: {
   items: Completion[];
   empty: string;
   hrefFor: (item: Completion) => string;
   titleFor: (item: Completion) => string;
+  detailFor?: (item: Completion) => string | null;
 }) {
   if (items.length === 0) {
-    return <p className="mt-3 text-base leading-relaxed text-muted">{empty}</p>;
+    return <p className="mt-1 text-sm leading-relaxed text-muted">{empty}</p>;
   }
 
   return (
-    <ul className="mt-3 space-y-3">
+    <ul className="space-y-2.5">
       {items.map((item) => (
         <li key={item.id} className="rounded-2xl border border-line bg-surface p-4">
-          <p className="text-sm text-muted">Marked done {formatWhen(item.completedAt)}</p>
+          <p className="text-sm text-muted">
+            Marked done {formatWhen(item.completedAt)}
+            {detailFor?.(item) ? ` · ${detailFor(item)}` : ""}
+          </p>
           <h3 className="mt-1 font-display text-xl leading-tight">{titleFor(item)}</h3>
-          <p className="mt-3 text-base leading-relaxed">
+          <p className="mt-2 text-base leading-relaxed">
             {item.note ? item.note : <span className="text-muted">No note yet.</span>}
           </p>
           <Link
             href={hrefFor(item)}
-            className="mt-3 inline-flex min-h-11 items-center font-semibold text-accent"
+            className="mt-2 inline-flex min-h-11 items-center font-semibold text-accent"
           >
             Open
           </Link>

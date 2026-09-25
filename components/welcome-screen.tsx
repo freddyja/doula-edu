@@ -57,11 +57,11 @@ function WelcomeForm({
           Wellness support only · not medical advice
         </p>
         <h1 className="font-display text-3xl leading-tight text-balance">
-          Learn a little. Move a little. Then rest.
+          Prep a little. Learn a little. Move a little.
         </h1>
         <p className="text-base leading-relaxed text-muted">
-          Short lessons and gentle movement for the stage you choose. Nothing here is a personal
-          plan, and nothing is sent to a server.
+          An optional daily prep card, short lessons, and gentle movement for the stage you
+          choose. Nothing here is a personal plan, and nothing is sent to a server.
         </p>
       </header>
 

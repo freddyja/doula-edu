@@ -73,6 +73,20 @@ export function Card({
 
 export const cardLinkClass = `pressable block ${cardSurface} transition-colors hover:border-accent active:bg-accent-soft`;
 
+export function Badge({
+  children,
+  tone = "accent",
+}: {
+  children: React.ReactNode;
+  tone?: "accent" | "plain";
+}) {
+  const className =
+    tone === "accent"
+      ? "rounded-full bg-accent-soft px-3 py-1 font-semibold text-accent"
+      : "rounded-full border border-line px-3 py-1 font-semibold";
+  return <span className={className}>{children}</span>;
+}
+
 export function LoadingState() {
   return (
     <p className="text-lg text-muted" role="status">
