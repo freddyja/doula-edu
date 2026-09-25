@@ -77,7 +77,7 @@ function CompleteForm({
 
   return (
     <form
-      className="rounded-3xl border border-line bg-surface p-5"
+      className="rounded-2xl border border-line bg-surface p-4"
       onSubmit={(event) => {
         event.preventDefault();
         void onSave();

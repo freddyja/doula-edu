@@ -1,8 +1,13 @@
 type IconProps = {
   className?: string;
+  active?: boolean;
 };
 
-function Svg({ className, children }: IconProps & { children: React.ReactNode }) {
+function Svg({
+  className,
+  active,
+  children,
+}: IconProps & { children: React.ReactNode }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -10,7 +15,7 @@ function Svg({ className, children }: IconProps & { children: React.ReactNode })
       className={className ?? "size-6"}
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.75"
+      strokeWidth={active ? 2.35 : 1.75}
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -31,7 +36,7 @@ export function HomeIcon(props: IconProps) {
 export function TodayIcon(props: IconProps) {
   return (
     <Svg {...props}>
-      <circle cx="12" cy="12" r="4" />
+      <circle cx="12" cy="12" r="4" fill={props.active ? "currentColor" : "none"} />
       <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4 19 19M19 5l-1.6 1.6M6.6 17.4 5 19" />
     </Svg>
   );
@@ -70,6 +75,14 @@ export function MarkIcon(props: IconProps) {
     <Svg {...props}>
       <circle cx="12" cy="12" r="8" />
       <circle cx="12" cy="12" r="3" />
+    </Svg>
+  );
+}
+
+export function ChevronLeft(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M14.5 5.5 8 12l6.5 6.5" />
     </Svg>
   );
 }

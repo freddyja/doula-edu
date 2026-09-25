@@ -1,6 +1,6 @@
 // Keep BASE aligned with `basePath` in lib/base-path.ts.
 const BASE = "/doula-edu";
-const CACHE = "doula-shell-v2";
+const CACHE = "doula-shell-v3";
 const PRECACHE = [
   `${BASE}/`,
   `${BASE}/manifest.webmanifest`,
